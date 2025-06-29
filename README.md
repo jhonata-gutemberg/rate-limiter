@@ -5,10 +5,12 @@ The advantages of this service is to prevent resource starvation in case of a Do
 reducing costs by limiting the number of calls to a thirty-party api and prevent servers overload.
 ## Requirements
 ### Functional
-- [ ] Accurately limit excessive requests
+- [X] Accurately limit excessive requests
 - [ ] Distributed rate limiting
-- [ ] Error handling
+- [X] Error handling
 ### Non-functional
-- [ ] Low latency. Should not slow down HTTP response time
-- [ ] Use as little memory as possible
+- [X] Low latency. Should not slow down HTTP response time
+- [X] Use as little memory as possible
 - [ ] High fault tolerance
+### High-level Design
+![High-level Design](docs/high-level-design.excalidraw.png)
