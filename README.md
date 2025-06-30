@@ -6,11 +6,11 @@ reducing costs by limiting the number of calls to a thirty-party api and prevent
 ## Requirements
 ### Functional
 - [X] Accurately limit excessive requests
-- [ ] Distributed rate limiting
+- [X] Distributed rate limiting
 - [X] Error handling
 ### Non-functional
 - [X] Low latency. Should not slow down HTTP response time
 - [X] Use as little memory as possible
-- [ ] High fault tolerance
+- [X] High fault tolerance
 ### High-level Design
 ![High-level Design](docs/high-level-design.excalidraw.png)
