@@ -18,7 +18,7 @@ reducing costs by limiting the number of calls to a thirty-party api and prevent
 - [X] High fault tolerance
 
 ## Architecture
-![High-level Design](docs/high-level-design.excalidraw.png)
+![Rate limiter](docs/rate-limiter.excalidraw.png)
 The rate limiter should gather user id or ip address information of the requests and them apply
 a restriction based on some limits. The limits could be stored in a file by using services like S3
 or a database, and this information could be cached and refreshed from time to time by a worker.
