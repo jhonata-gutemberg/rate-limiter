@@ -12,5 +12,24 @@ reducing costs by limiting the number of calls to a thirty-party api and prevent
 - [X] Low latency. Should not slow down HTTP response time
 - [X] Use as little memory as possible
 - [X] High fault tolerance
-### High-level Design
+## Architecture
 ![High-level Design](docs/high-level-design.excalidraw.png)
+The rate limiter should gather user id or ip address information of the requests and them apply
+a restriction based on some limits. The limits could be stored in a file by using services like S3
+or a database, and this information could be cached and refreshed from time to time by a worker.
+
+### File structure
+The file structure could look like this:
+```yml
+- action: create #create, read, update, delete
+  resource: posts
+  rate_limit:
+    limited_by: identifier #identifier, ip_address
+    unit: minute #second, minute, hour, day
+    requests_per_unit: 2
+```
+In this example the action and resource represents where the limits will be applied.
+Inside the rate_limit attribute, there is limited_by which identifies fi the limit will
+by applied by id, ip or another property, the unit sets the window time and
+requests_per_unit sets the maximum allowed value on this window size.
+In this file it's being defined that each user can create only 2 posts by minute.
