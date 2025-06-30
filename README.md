@@ -60,3 +60,7 @@ database to store a snapshot of the values in memory, from time to time.
 For the memory storage a key-value storage could be used with the following schemas:
 
 ![Database](docs/db.excalidraw.png)
+
+### Race condition
+Concurrent rate limiters can present race condition issues, to prevent that could be
+used Lua script to ensure atomicity.
