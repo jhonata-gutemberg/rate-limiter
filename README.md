@@ -50,3 +50,13 @@ the request will be rejected with a 409 HTTP response (Too many requests).
 
 The tokens can be refilled through a worker that runs for each time window. For instance
 each second, minute, hour or once a day.
+
+### Storage
+To achieve the latency requirements could be used a memory database, nevertheless
+it could be a problem for long widow sizes, for instance a dairy limit, because the
+storage can crash and the data could be lost. To mitigate that could be added a NoSQL
+database to store a snapshot of the values in memory, from time to time.
+
+For the memory storage a key-value storage could be used with the following schemas:
+
+![Database](docs/db.excalidraw.png)
