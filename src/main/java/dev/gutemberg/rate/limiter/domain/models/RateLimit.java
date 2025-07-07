@@ -1,4 +1,6 @@
 package dev.gutemberg.rate.limiter.domain.models;
 
-public record RateLimit(String limitedBy, String unit, int requestsPerUnit) {
+import dev.gutemberg.rate.limiter.domain.enums.LimitedBy;
+
+public record RateLimit(LimitedBy limitedBy, String unit, int requestsPerUnit) {
 }
