@@ -1,1 +1,5 @@
-spring.application.name: rate-limiter
+spring:
+  application.name: rate-limiter
+  redis:
+    host: localhost
+    port: 6379
