@@ -44,7 +44,7 @@ To handle the limit validation in a memory efficient way, token bucket algorithm
 The rate limiter could validate if there are limits configured for a specific resource
 and action, then validate for each time window bucket, if there is token available,
 if it's true, the tokens will be consumed and the request will be move forward, otherwise
-the request will be rejected with a 409 HTTP response (Too many requests).
+the request will be rejected with a 429 HTTP response (Too many requests).
 
 ![Token Bucket](docs/token-bucket.excalidraw.png)
 
