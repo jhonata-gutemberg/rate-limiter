@@ -1,22 +1,22 @@
-package dev.gutemberg.rate.limiter.infrastructure.redis;
+package dev.gutemberg.rate.limiter.infrastructure.repositories;
 
 import dev.gutemberg.rate.limiter.domain.models.RateLimit;
 import dev.gutemberg.rate.limiter.domain.models.RateLimitCollectionKey;
 import dev.gutemberg.rate.limiter.domain.repositories.RateLimitRepository;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
-import java.util.List;
+import java.util.Set;
 
 @Repository
 public class RedisRateLimitRepository implements RateLimitRepository {
-    private final RedisTemplate<RateLimitCollectionKey, List<RateLimit>> redisTemplate;
+    private final RedisTemplate<String, RateLimit> redisTemplate;
 
-    public RedisRateLimitRepository(final RedisTemplate<RateLimitCollectionKey, List<RateLimit>> redisTemplate) {
+    public RedisRateLimitRepository(final RedisTemplate<String, RateLimit> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
     @Override
-    public List<RateLimit> findAllByCollectionKey(final RateLimitCollectionKey rateLimitCollectionKey) {
-        return redisTemplate.opsForValue().get(rateLimitCollectionKey);
+    public Set<RateLimit> findAllByCollectionKey(final RateLimitCollectionKey collectionKey) {
+        return redisTemplate.opsForSet().members(collectionKey.toString());
     }
 }

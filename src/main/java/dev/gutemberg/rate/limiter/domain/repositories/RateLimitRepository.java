@@ -2,8 +2,8 @@ package dev.gutemberg.rate.limiter.domain.repositories;
 
 import dev.gutemberg.rate.limiter.domain.models.RateLimit;
 import dev.gutemberg.rate.limiter.domain.models.RateLimitCollectionKey;
-import java.util.List;
+import java.util.Set;
 
 public interface RateLimitRepository {
-    List<RateLimit> findAllByCollectionKey(RateLimitCollectionKey rateLimitCollectionKey);
+    Set<RateLimit> findAllByCollectionKey(RateLimitCollectionKey collectionKey);
 }
