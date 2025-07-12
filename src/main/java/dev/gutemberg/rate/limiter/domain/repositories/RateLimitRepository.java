@@ -1,9 +1,9 @@
 package dev.gutemberg.rate.limiter.domain.repositories;
 
-import dev.gutemberg.rate.limiter.domain.enums.Action;
 import dev.gutemberg.rate.limiter.domain.models.RateLimit;
-import java.util.Optional;
+import dev.gutemberg.rate.limiter.domain.models.RateLimitCollectionKey;
+import java.util.List;
 
 public interface RateLimitRepository {
-    Optional<RateLimit> findByActionAndResource(Action action, String resource);
+    List<RateLimit> findAllByCollectionKey(RateLimitCollectionKey rateLimitCollectionKey);
 }
