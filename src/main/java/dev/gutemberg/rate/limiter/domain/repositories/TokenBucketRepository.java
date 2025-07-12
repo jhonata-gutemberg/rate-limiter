@@ -1,10 +1,10 @@
 package dev.gutemberg.rate.limiter.domain.repositories;
 
 import dev.gutemberg.rate.limiter.domain.models.TokenBucket;
-import dev.gutemberg.rate.limiter.domain.models.TokenBucketCollectionKey;
-import java.util.List;
+import dev.gutemberg.rate.limiter.domain.models.TokenBucketKey;
+import java.util.Optional;
 
 public interface TokenBucketRepository {
-    List<TokenBucket> findAllByCollectionKey(TokenBucketCollectionKey collectionKey);
-    void put(TokenBucketCollectionKey collectionKey, TokenBucket tokenBucket);
+    Optional<TokenBucket> findOneByKey(TokenBucketKey tokenBucketKey);
+    void save(TokenBucketKey tokenBucketKey, TokenBucket tokenBucket);
 }

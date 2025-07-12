@@ -4,5 +4,10 @@ public enum RateUnit {
     SECONDS,
     MINUTES,
     HOURS,
-    DAYS
+    DAYS;
+
+    @Override
+    public String toString() {
+        return name().toLowerCase();
+    }
 }
