@@ -1,34 +1,20 @@
 package dev.gutemberg.rate.limiter.domain.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 public class TokenBucket {
-    @JsonIgnore
-    private TokenBucketKey key;
+    private final TokenBucketKey key;
     private int availableTokens;
-
-    public TokenBucket() {}
 
     public TokenBucket(final TokenBucketKey key, final int availableTokens) {
         this.key = key;
         this.availableTokens = availableTokens;
     }
 
-    public int getAvailableTokens() {
-        return availableTokens;
-    }
-
-    public void setAvailableTokens(int availableTokens) {
-        this.availableTokens = availableTokens;
-    }
-
-    public TokenBucketKey getKey() {
+    public TokenBucketKey key() {
         return key;
     }
 
-    public TokenBucket setKey(TokenBucketKey key) {
-        this.key = key;
-        return this;
+    public int availableTokens() {
+        return availableTokens;
     }
 
     public boolean hasAvailableTokens() {
