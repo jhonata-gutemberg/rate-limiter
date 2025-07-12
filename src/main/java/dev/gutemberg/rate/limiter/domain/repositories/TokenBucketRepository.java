@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface TokenBucketRepository {
     Optional<TokenBucket> findOneByKey(TokenBucketKey tokenBucketKey);
-    void save(TokenBucketKey tokenBucketKey, TokenBucket tokenBucket);
+    void save(TokenBucket tokenBucket);
 }

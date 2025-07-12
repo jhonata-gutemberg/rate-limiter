@@ -17,11 +17,12 @@ public class RedisTokenBucketRepository implements TokenBucketRepository {
 
     @Override
     public Optional<TokenBucket> findOneByKey(final TokenBucketKey tokenBucketKey) {
-        return Optional.ofNullable(this.redisTemplate.opsForValue().get(tokenBucketKey.toString()));
+        return Optional.ofNullable(this.redisTemplate.opsForValue().get(tokenBucketKey.toString()))
+                .map(tokenBucket -> tokenBucket.setKey(tokenBucketKey));
     }
 
     @Override
-    public void save(final TokenBucketKey tokenBucketKey, final TokenBucket tokenBucket) {
-        this.redisTemplate.opsForValue().set(tokenBucketKey.toString(), tokenBucket);
+    public void save(final TokenBucket tokenBucket) {
+        this.redisTemplate.opsForValue().set(tokenBucket.getKey().toString(), tokenBucket);
     }
 }
