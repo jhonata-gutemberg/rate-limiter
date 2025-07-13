@@ -21,7 +21,7 @@ public class TokenBucket {
         return availableTokens > 0;
     }
 
-    public void decrement() {
+    public void consumeToken() {
         availableTokens--;
     }
 }
