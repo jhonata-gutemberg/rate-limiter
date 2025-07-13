@@ -1,8 +1,8 @@
 package dev.gutemberg.rate.limiter.domain.models;
 
-import dev.gutemberg.rate.limiter.domain.enums.Action;
+import dev.gutemberg.rate.limiter.domain.enums.RateLimitRequestAction;
 
-public record RateLimitCollectionKey(Action action, String resource) {
+public record RateLimitCollectionKey(RateLimitRequestAction action, String resource) {
     @Override
     public String toString() {
         return action + ":" + resource;
