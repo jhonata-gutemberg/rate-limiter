@@ -33,7 +33,7 @@ public record RateLimitResponse(RequestAllowed requestAllowed, RequestDenied req
         return new RateLimitResponse(rateUnit);
     }
 
-    public boolean isRequestDenied() {
+    public boolean hasRequestDenied() {
         return requestDenied != null;
     }
 
