@@ -23,14 +23,16 @@ public class RateLimitHttpHeadersBuilder {
     public static HttpHeaders allowed(final RateLimitResponse.RequestAllowed requestAllowed) {
         final var rateUnits = requestAllowed.rateUnits();
         final var headers = new HttpHeaders();
-        headers.add(
-                RATE_LIMIT_REQUESTS_REMAINING_HEADER,
-                allowedHeaderValue(rateUnits, requestAllowed.remainingRequests())
-        );
-        headers.add(
-                RATE_LIMIT_REQUESTS_LIMIT_HEADER,
-                allowedHeaderValue(rateUnits, requestAllowed.requestsLimit())
-        );
+        if (!rateUnits.isEmpty()) {
+            headers.add(
+                    RATE_LIMIT_REQUESTS_REMAINING_HEADER,
+                    allowedHeaderValue(rateUnits, requestAllowed.remainingRequests())
+            );
+            headers.add(
+                    RATE_LIMIT_REQUESTS_LIMIT_HEADER,
+                    allowedHeaderValue(rateUnits, requestAllowed.requestsLimit())
+            );
+        }
         return headers;
     }
 
