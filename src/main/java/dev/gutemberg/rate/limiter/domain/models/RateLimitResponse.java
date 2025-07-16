@@ -2,7 +2,6 @@ package dev.gutemberg.rate.limiter.domain.models;
 
 import dev.gutemberg.rate.limiter.domain.enums.RateUnit;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toUnmodifiableSet;

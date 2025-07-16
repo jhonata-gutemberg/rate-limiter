@@ -1,4 +1,4 @@
-package dev.gutemberg.rate.limiter.infrastructure.repositories;
+package dev.gutemberg.rate.limiter.infrastructure.repositories.redis;
 
 import dev.gutemberg.rate.limiter.domain.models.TokenBucket;
 import dev.gutemberg.rate.limiter.domain.models.TokenBucketKey;

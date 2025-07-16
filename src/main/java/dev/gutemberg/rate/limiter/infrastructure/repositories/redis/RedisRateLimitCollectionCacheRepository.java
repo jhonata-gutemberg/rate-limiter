@@ -1,4 +1,4 @@
-package dev.gutemberg.rate.limiter.infrastructure.repositories;
+package dev.gutemberg.rate.limiter.infrastructure.repositories.redis;
 
 import dev.gutemberg.rate.limiter.domain.models.RateLimitCollection;
 import dev.gutemberg.rate.limiter.domain.repositories.RateLimitCollectionCacheRepository;

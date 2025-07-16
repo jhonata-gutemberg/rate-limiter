@@ -1,0 +1,6 @@
+- action: create #create, read, update, delete
+  resource: posts
+  limits:
+    - by: identifier #identifier, ip_address
+      unit: minute #second, minute, hour, day
+      requestsPerUnit: 2

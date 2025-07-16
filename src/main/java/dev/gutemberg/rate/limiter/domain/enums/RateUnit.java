@@ -1,10 +1,10 @@
 package dev.gutemberg.rate.limiter.domain.enums;
 
 public enum RateUnit {
-    SECONDS(),
-    MINUTES(60),
-    HOURS(MINUTES.valueInSeconds() * 60),
-    DAYS(HOURS.valueInSeconds() * 24);
+    SECOND(),
+    MINUTE(60),
+    HOUR(MINUTE.valueInSeconds() * 60),
+    DAY(HOUR.valueInSeconds() * 24);
 
     private final int valueInSeconds;
 
