@@ -2,6 +2,7 @@ package dev.gutemberg.rate.limiter.domain.models;
 
 import dev.gutemberg.rate.limiter.domain.enums.RateUnit;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static java.util.stream.Collectors.toUnmodifiableSet;
@@ -21,12 +22,21 @@ public record RateLimitResponse(RequestAllowed requestAllowed, RequestDenied req
     }
 
     public static RateLimitResponse allowRequest(
-            final Set<RateLimitCollection.Value> rateLimits,
+            final RateLimitCollection collection,
             final Map<RateUnit, Integer> remainingRequests
     ) {
-        final var rateUnits = rateLimits.stream().map(RateLimitCollection.Value::unit).collect(toUnmodifiableSet());
-        final var requestsLimit = rateLimits.stream().collect(toMap(RateLimitCollection.Value::unit, RateLimitCollection.Value::requestsPerUnit));
+        final var rateUnits = collection.values()
+                .stream()
+                .map(RateLimitCollection.Value::unit)
+                .collect(toUnmodifiableSet());
+        final var requestsLimit = collection.values()
+                .stream()
+                .collect(toMap(RateLimitCollection.Value::unit, RateLimitCollection.Value::requestsPerUnit));
         return new RateLimitResponse(rateUnits, remainingRequests, requestsLimit);
+    }
+
+    public static RateLimitResponse allowRequest() {
+        return new RateLimitResponse(Set.of(), Map.of(), Map.of());
     }
 
     public static RateLimitResponse denyRequest(final RateUnit rateUnit) {

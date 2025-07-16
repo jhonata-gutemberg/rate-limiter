@@ -1,7 +1,7 @@
 package dev.gutemberg.rate.limiter.infrastructure.configs;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.gutemberg.rate.limiter.domain.models.RateLimit;
+import dev.gutemberg.rate.limiter.domain.models.RateLimitCollection;
 import dev.gutemberg.rate.limiter.infrastructure.models.TokenBucketValue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,11 +14,11 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
     @Bean
-    public RedisTemplate<String, RateLimit> rateLimitRedisTemplate(
+    public RedisTemplate<String, RateLimitCollection.Value> rateLimitCollectionRedisTemplate(
             final RedisConnectionFactory factory,
             final ObjectMapper objectMapper
     ) {
-        return redisTemplate(factory, objectMapper, RateLimit.class);
+        return redisTemplate(factory, objectMapper, RateLimitCollection.Value.class);
     }
 
     @Bean

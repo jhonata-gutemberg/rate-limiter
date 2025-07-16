@@ -7,8 +7,8 @@ import dev.gutemberg.rate.limiter.domain.repositories.TokenBucketRepository;
 import org.springframework.stereotype.Service;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Executors;
+import java.util.function.Function;
 
 import static dev.gutemberg.rate.limiter.domain.models.RateLimitResponse.*;
 
@@ -26,25 +26,26 @@ public class ApplyRateLimitUseCase {
     }
 
     public RateLimitResponse perform(final RateLimitRequest request) {
-        final Map<RateUnit, Integer> remainingRequests = new EnumMap<>(RateUnit.class);
-        final var collectionKey = new RateLimitCollection.Key(request.action(), request.resource());
-        final var optionalCollection = rateLimitCollectionCacheRepository.findOneByKey(collectionKey);
-        if (optionalCollection.isPresent()) {
-            final var collection = optionalCollection.get();
-            final var values = collection.values();
+        return rateLimitCollectionCacheRepository.findOneByKey(RateLimitCollection.Key.from(request))
+                .map(allowOrDenyRequest(request))
+                .orElse(allowRequest());
+    }
+
+    private Function<RateLimitCollection, RateLimitResponse> allowOrDenyRequest(final RateLimitRequest request) {
+        return collection -> {
+            final Map<RateUnit, Integer> remainingRequests = new EnumMap<>(RateUnit.class);
             try (final var executor = Executors.newVirtualThreadPerTaskExecutor()) {
-                for (final var rateLimit: values) {
+                for (final var rateLimit: collection.values()) {
                     final var rateUnit = rateLimit.unit();
-                    final var tokenBucket = getTokenBucket(collectionKey, rateLimit, request);
+                    final var tokenBucket = getTokenBucket(collection.key(), rateLimit, request);
                     if (!tokenBucket.hasAvailableTokens()) {
                         return denyRequest(rateUnit);
                     }
                     executor.submit(consumeToken(tokenBucket, remainingRequests, rateUnit));
                 }
             }
-            return allowRequest(values, remainingRequests);
-        }
-        return allowRequest(Set.of(), remainingRequests);
+            return allowRequest(collection, remainingRequests);
+        };
     }
 
     private TokenBucket getTokenBucket(
