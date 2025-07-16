@@ -1,10 +1,8 @@
 package dev.gutemberg.rate.limiter.domain.models;
 
-import dev.gutemberg.rate.limiter.domain.enums.RateUnit;
-
-public record TokenBucketKey(RateLimitCollection.Key rateLimitCollectionKey, String limitIdentifier, RateUnit rateUnit) {
+public record TokenBucketKey(String configKey, String limitIdentifier, RateLimitConfig.Limit.Unit rateUnit) {
     @Override
     public String toString() {
-        return rateLimitCollectionKey + ":" + limitIdentifier + ":" + rateUnit;
+        return configKey + ":" + limitIdentifier + ":" + rateUnit;
     }
 }

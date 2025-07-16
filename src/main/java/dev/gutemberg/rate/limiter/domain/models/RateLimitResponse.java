@@ -1,36 +1,37 @@
 package dev.gutemberg.rate.limiter.domain.models;
 
-import dev.gutemberg.rate.limiter.domain.enums.RateUnit;
 import java.util.Map;
 import java.util.Set;
 
+import static dev.gutemberg.rate.limiter.domain.models.RateLimitConfig.*;
+import static dev.gutemberg.rate.limiter.domain.models.RateLimitConfig.Limit.*;
 import static java.util.stream.Collectors.toUnmodifiableSet;
 import static java.util.stream.Collectors.toMap;
 
 public record RateLimitResponse(RequestAllowed requestAllowed, RequestDenied requestDenied) {
     private RateLimitResponse(
-            final Set<RateUnit> rateUnits,
-            final Map<RateUnit, Integer> remainingRequests,
-            final Map<RateUnit, Integer> requestsLimit
+            final Set<Unit> rateUnits,
+            final Map<Unit, Integer> remainingRequests,
+            final Map<Unit, Integer> requestsLimit
     ) {
         this(new RequestAllowed(rateUnits, remainingRequests, requestsLimit), null);
     }
 
-    private RateLimitResponse(final RateUnit rateUnit) {
-        this(null, new RequestDenied(rateUnit.valueInSeconds()));
+    private RateLimitResponse(final Unit unit) {
+        this(null, new RequestDenied(60));
     }
 
     public static RateLimitResponse allowRequest(
-            final RateLimitCollection collection,
-            final Map<RateUnit, Integer> remainingRequests
+            final RateLimitConfig config,
+            final Map<Unit, Integer> remainingRequests
     ) {
-        final var rateUnits = collection.values()
+        final var rateUnits = config.limits()
                 .stream()
-                .map(RateLimitCollection.Value::unit)
+                .map(Limit::unit)
                 .collect(toUnmodifiableSet());
-        final var requestsLimit = collection.values()
+        final var requestsLimit = config.limits()
                 .stream()
-                .collect(toMap(RateLimitCollection.Value::unit, RateLimitCollection.Value::requestsPerUnit));
+                .collect(toMap(Limit::unit, Limit::requestsPerUnit));
         return new RateLimitResponse(rateUnits, remainingRequests, requestsLimit);
     }
 
@@ -38,8 +39,8 @@ public record RateLimitResponse(RequestAllowed requestAllowed, RequestDenied req
         return new RateLimitResponse(Set.of(), Map.of(), Map.of());
     }
 
-    public static RateLimitResponse denyRequest(final RateUnit rateUnit) {
-        return new RateLimitResponse(rateUnit);
+    public static RateLimitResponse denyRequest(final Unit unit) {
+        return new RateLimitResponse(unit);
     }
 
     public boolean hasRequestDenied() {
@@ -47,9 +48,9 @@ public record RateLimitResponse(RequestAllowed requestAllowed, RequestDenied req
     }
 
     public record RequestAllowed(
-            Set<RateUnit> rateUnits,
-            Map<RateUnit, Integer> remainingRequests,
-            Map<RateUnit, Integer> requestsLimit
+            Set<Unit> rateUnits,
+            Map<Unit, Integer> remainingRequests,
+            Map<Unit, Integer> requestsLimit
     ) {
     }
 

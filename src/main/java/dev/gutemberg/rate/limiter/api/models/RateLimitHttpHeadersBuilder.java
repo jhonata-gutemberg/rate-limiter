@@ -1,6 +1,6 @@
 package dev.gutemberg.rate.limiter.api.models;
 
-import dev.gutemberg.rate.limiter.domain.enums.RateUnit;
+import dev.gutemberg.rate.limiter.domain.models.RateLimitConfig.Limit.Unit;
 import dev.gutemberg.rate.limiter.domain.models.RateLimitResponse;
 import org.springframework.http.HttpHeaders;
 import java.util.Map;
@@ -36,7 +36,7 @@ public class RateLimitHttpHeadersBuilder {
         return headers;
     }
 
-    private static String allowedHeaderValue(final Set<RateUnit> rateUnits, final Map<RateUnit, Integer> requests) {
+    private static String allowedHeaderValue(final Set<Unit> rateUnits, final Map<Unit, Integer> requests) {
         final var parameterTemplate = "per-%s=%s";
         return rateUnits.stream()
                 .map(rateUnit -> parameterTemplate.formatted(rateUnit, requests.get(rateUnit)))

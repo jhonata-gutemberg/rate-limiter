@@ -3,4 +3,4 @@
   limits:
     - by: identifier #identifier, ip_address
       unit: minute #second, minute, hour, day
-      requestsPerUnit: 2
+      requests_per_unit: 2
