@@ -1,18 +1,19 @@
 package dev.gutemberg.rate.limiter.infrastructure.repositories;
 
 import dev.gutemberg.rate.limiter.domain.models.RateLimit;
+import dev.gutemberg.rate.limiter.domain.models.RateLimitCollection;
 import dev.gutemberg.rate.limiter.domain.models.RateLimitCollectionKey;
 import dev.gutemberg.rate.limiter.domain.repositories.RateLimitCacheRepository;
+import dev.gutemberg.rate.limiter.infrastructure.converters.RateLimitCollectionKeyConverter;
 import dev.gutemberg.rate.limiter.infrastructure.converters.RateLimitCollectionKeyToStringConverter;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Executors;
 
 @Repository
 public class RedisRateLimitCacheRepository implements RateLimitCacheRepository {
-    private final RedisTemplate<String, RateLimit> redisTemplate;
+    private final RedisTemplate<String, RateLimitCollection.Value> redisTemplate;
 
     public RedisRateLimitCacheRepository(final RedisTemplate<String, RateLimit> redisTemplate) {
         this.redisTemplate = redisTemplate;
@@ -20,21 +21,19 @@ public class RedisRateLimitCacheRepository implements RateLimitCacheRepository {
 
     @Override
     public Set<RateLimit> findAllByCollectionKey(final RateLimitCollectionKey collectionKey) {
-        return redisTemplate.opsForSet().members(RateLimitCollectionKeyToStringConverter.convert(collectionKey));
+        return redisTemplate.opsForSet().members(RateLimitCollectionKeyConverter.toString(collectionKey));
     }
 
     @Override
-    public void save(final Map<RateLimitCollectionKey, Set<RateLimit>> rateLimitCollections) {
+    public void save(final Set<RateLimitCollection> collections) {
         try (final var executor = Executors.newVirtualThreadPerTaskExecutor()) {
-            rateLimitCollections.entrySet()
-                    .forEach(entry -> executor.submit(() -> save(entry)));
+            collections.forEach(collection -> executor.submit(() -> save(collection)));
         }
     }
 
-    private void save(final Map.Entry<RateLimitCollectionKey, Set<RateLimit>> rateLimitEntry) {
-        final var collectionKey = RateLimitCollectionKeyToStringConverter.convert(rateLimitEntry.getKey());
+    private void save(final RateLimitCollection collection) {
+        final var collectionKey = RateLimitCollectionKeyConverter.toString(collection.key());
         redisTemplate.delete(collectionKey);
-        rateLimitEntry.getValue()
-                .forEach(rateLimit -> redisTemplate.opsForSet().add(collectionKey, rateLimit));
+        collection.values().forEach(rateLimit -> redisTemplate.opsForSet().add(collectionKey, rateLimit));
     }
 }

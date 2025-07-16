@@ -21,11 +21,11 @@ public record RateLimitResponse(RequestAllowed requestAllowed, RequestDenied req
     }
 
     public static RateLimitResponse allowRequest(
-            final Set<RateLimit> rateLimits,
+            final Set<RateLimitCollection.Value> rateLimits,
             final Map<RateUnit, Integer> remainingRequests
     ) {
-        final var rateUnits = rateLimits.stream().map(RateLimit::unit).collect(toUnmodifiableSet());
-        final var requestsLimit = rateLimits.stream().collect(toMap(RateLimit::unit, RateLimit::requestsPerUnit));
+        final var rateUnits = rateLimits.stream().map(RateLimitCollection.Value::unit).collect(toUnmodifiableSet());
+        final var requestsLimit = rateLimits.stream().collect(toMap(RateLimitCollection.Value::unit, RateLimitCollection.Value::requestsPerUnit));
         return new RateLimitResponse(rateUnits, remainingRequests, requestsLimit);
     }
 
