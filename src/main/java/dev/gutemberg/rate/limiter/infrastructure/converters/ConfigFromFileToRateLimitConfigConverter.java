@@ -1,8 +1,8 @@
 package dev.gutemberg.rate.limiter.infrastructure.converters;
 
 import dev.gutemberg.rate.limiter.domain.models.RateLimitConfig;
+import dev.gutemberg.rate.limiter.infrastructure.contracts.Converter;
 import dev.gutemberg.rate.limiter.infrastructure.models.RateLimitConfigFromFile;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import java.util.stream.Collectors;
 

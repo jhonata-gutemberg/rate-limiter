@@ -1,8 +1,8 @@
 package dev.gutemberg.rate.limiter.infrastructure.configs;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.gutemberg.rate.limiter.domain.models.RateLimitCollection;
-import dev.gutemberg.rate.limiter.infrastructure.models.TokenBucketValue;
+import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -14,29 +14,15 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisConfig {
     @Bean
-    public RedisTemplate<String, RateLimitCollection.Value> rateLimitCollectionRedisTemplate(
-            final RedisConnectionFactory factory,
-            final ObjectMapper objectMapper
-    ) {
-        return redisTemplate(factory, objectMapper, RateLimitCollection.Value.class);
-    }
-
-    @Bean
-    public RedisTemplate<String, TokenBucketValue> tokenBucketRedisTemplate(
-            final RedisConnectionFactory factory,
-            final ObjectMapper objectMapper
-    ) {
-        return redisTemplate(factory, objectMapper, TokenBucketValue.class);
-    }
-
-    private <V> RedisTemplate<String, V> redisTemplate(
-            final RedisConnectionFactory factory,
-            final ObjectMapper objectMapper,
-            final Class<V> value
-    ) {
+    public RedisTemplate<String, ?> redisTemplate(final RedisConnectionFactory factory, final ObjectMapper objectMapper) {
+        objectMapper.activateDefaultTyping(
+                BasicPolymorphicTypeValidator.builder().allowIfSubType(Object.class).build(),
+                ObjectMapper.DefaultTyping.EVERYTHING,
+                JsonTypeInfo.As.PROPERTY
+        );
         final RedisSerializer<String> stringSerializer = new StringRedisSerializer();
-        final RedisSerializer<V> valueSerializer = new Jackson2JsonRedisSerializer<>(objectMapper, value);
-        final RedisTemplate<String, V> template = new RedisTemplate<>();
+        final RedisSerializer<Object> valueSerializer = new Jackson2JsonRedisSerializer<>(objectMapper, Object.class);
+        final RedisTemplate<String, ?> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
         template.setKeySerializer(stringSerializer);
         template.setHashValueSerializer(stringSerializer);
