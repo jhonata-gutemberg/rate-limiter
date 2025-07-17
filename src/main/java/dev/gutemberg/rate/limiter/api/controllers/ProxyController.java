@@ -1,6 +1,7 @@
 package dev.gutemberg.rate.limiter.api.controllers;
 
 import dev.gutemberg.rate.limiter.api.contracts.Converter;
+import dev.gutemberg.rate.limiter.api.models.HttpHeadersBuilder;
 import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.ApplyRateLimitUseCaseInput;
 import dev.gutemberg.rate.limiter.domain.rate.limit.usecases.ApplyRateLimitUseCase;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static dev.gutemberg.rate.limiter.api.models.RateLimitHttpHeadersBuilder.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
@@ -35,7 +35,7 @@ public class ProxyController {
         final var input = httpMethodAndRequestToApplyRateLimitUseCaseInputConverter.convert(Pair.of(method, request));
         final var output = applyRateLimitUseCase.perform(input);
         return output.isAllowed() ?
-                new ResponseEntity<>(buildHeaders(output.allowed()), HttpStatus.OK) :
-                new ResponseEntity<>(buildHeaders(output.denied()), HttpStatus.TOO_MANY_REQUESTS);
+                new ResponseEntity<>(HttpHeadersBuilder.build(output.allowed()), HttpStatus.OK) :
+                new ResponseEntity<>(HttpHeadersBuilder.build(output.denied()), HttpStatus.TOO_MANY_REQUESTS);
     }
 }
