@@ -1,16 +1,15 @@
 package dev.gutemberg.rate.limiter.api.controllers;
 
+import dev.gutemberg.rate.limiter.api.contracts.Converter;
 import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.ApplyRateLimitUseCaseInput;
 import dev.gutemberg.rate.limiter.domain.rate.limit.usecases.ApplyRateLimitUseCase;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.Objects;
 
 import static dev.gutemberg.rate.limiter.api.models.RateLimitHttpHeadersBuilder.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
@@ -33,9 +32,7 @@ public class ProxyController {
 
     @RequestMapping(value = "/**", method = {GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE})
     public ResponseEntity<Void> proxy(final HttpMethod method, final HttpServletRequest request) {
-        final var input = Objects.requireNonNull(
-                httpMethodAndRequestToApplyRateLimitUseCaseInputConverter.convert(Pair.of(method, request))
-        );
+        final var input = httpMethodAndRequestToApplyRateLimitUseCaseInputConverter.convert(Pair.of(method, request));
         final var output = applyRateLimitUseCase.perform(input);
         return output.isAllowed() ?
                 new ResponseEntity<>(buildHeaders(output.allowed()), HttpStatus.OK) :

@@ -1,7 +1,6 @@
 package dev.gutemberg.rate.limiter.domain.rate.limit.models;
 
 import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.ApplyRateLimitUseCaseInput;
-
 import java.util.Set;
 
 public record RateLimitConfig(String key, Set<Limit> limits) {
