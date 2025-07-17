@@ -1,7 +1,7 @@
 package dev.gutemberg.rate.limiter.infrastructure.repositories.redis;
 
 import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucket;
-import dev.gutemberg.rate.limiter.domain.repositories.TokenBucketRepository;
+import dev.gutemberg.rate.limiter.domain.token.bucket.repositories.TokenBucketRepository;
 import dev.gutemberg.rate.limiter.infrastructure.models.TokenBucketValue;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.redis.core.RedisTemplate;

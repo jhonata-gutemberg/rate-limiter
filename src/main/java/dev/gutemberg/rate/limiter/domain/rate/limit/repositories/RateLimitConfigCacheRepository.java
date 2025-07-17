@@ -1,6 +1,6 @@
-package dev.gutemberg.rate.limiter.domain.repositories;
+package dev.gutemberg.rate.limiter.domain.rate.limit.repositories;
 
-import dev.gutemberg.rate.limiter.domain.models.RateLimitConfig;
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig;
 import java.util.Optional;
 import java.util.Set;
 

@@ -1,11 +1,12 @@
 package dev.gutemberg.rate.limiter.api.models;
 
-import dev.gutemberg.rate.limiter.domain.models.RateLimitResponse;
-import dev.gutemberg.rate.limiter.domain.rate.limit.models.ApplyRateLimitUseCaseOutput.Allowed;
+import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.ApplyRateLimitUseCaseOutput.Allowed;
 import org.springframework.http.HttpHeaders;
 import java.util.Set;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
+
+import static dev.gutemberg.rate.limiter.domain.rate.limit.contracts.ApplyRateLimitUseCaseOutput.*;
 
 public class RateLimitHttpHeadersBuilder {
     private static final String RATE_LIMIT_RETRY_AFTER_SECONDS_HEADER = "X-RateLimit-Retry-After-Seconds";
@@ -13,12 +14,6 @@ public class RateLimitHttpHeadersBuilder {
     private static final String RATE_LIMIT_REQUESTS_LIMIT_HEADER = "X-RateLimit-Requests-Limit";
 
     private RateLimitHttpHeadersBuilder() {}
-
-    public static HttpHeaders denied(final RateLimitResponse.RequestDenied requestDenied) {
-        final var headers = new HttpHeaders();
-        headers.add(RATE_LIMIT_RETRY_AFTER_SECONDS_HEADER, String.valueOf(requestDenied.retryAfterInSeconds()));
-        return headers;
-    }
 
     public static HttpHeaders buildHeaders(final Allowed allowed) {
         final var data = allowed.data();

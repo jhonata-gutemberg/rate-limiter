@@ -1,4 +1,4 @@
-package dev.gutemberg.rate.limiter.domain.repositories;
+package dev.gutemberg.rate.limiter.domain.token.bucket.repositories;
 
 import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucket;
 import java.util.Optional;

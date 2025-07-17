@@ -1,5 +1,7 @@
 package dev.gutemberg.rate.limiter.domain.token.bucket.models;
 
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit.Unit;
+
 public class TokenBucket {
     private final String key;
     private int availableTokens;
@@ -23,5 +25,13 @@ public class TokenBucket {
 
     public void consumeToken() {
         availableTokens--;
+    }
+
+    public static class KeyBuilder {
+        private KeyBuilder() {}
+
+        public static String build(final String configKey, final String limitIdentifier, final Unit rateUnit) {
+            return configKey + ":" + limitIdentifier + ":" + rateUnit;
+        }
     }
 }

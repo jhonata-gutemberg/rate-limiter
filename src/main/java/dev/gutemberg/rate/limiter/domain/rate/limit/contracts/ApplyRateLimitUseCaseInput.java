@@ -1,6 +1,7 @@
-package dev.gutemberg.rate.limiter.domain.rate.limit.models;
+package dev.gutemberg.rate.limiter.domain.rate.limit.contracts;
 
-import dev.gutemberg.rate.limiter.domain.models.RateLimitConfig;
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig;
+
 import java.util.Map;
 
 public record ApplyRateLimitUseCaseInput(Action action, String resource, Map<RateLimitConfig.Limit.By, String> identifiers) {

@@ -1,7 +1,7 @@
 package dev.gutemberg.rate.limiter.api.converters;
 
 import dev.gutemberg.rate.limiter.domain.enums.RateLimitRequestAction;
-import dev.gutemberg.rate.limiter.domain.models.RateLimitConfig;
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig;
 import dev.gutemberg.rate.limiter.domain.models.RateLimitRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.convert.converter.Converter;

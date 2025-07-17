@@ -1,10 +1,12 @@
 package dev.gutemberg.rate.limiter.domain.models;
 
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig;
+
 import java.util.Map;
 import java.util.Set;
 
-import static dev.gutemberg.rate.limiter.domain.models.RateLimitConfig.*;
-import static dev.gutemberg.rate.limiter.domain.models.RateLimitConfig.Limit.*;
+import static dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.*;
+import static dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit.*;
 import static java.util.stream.Collectors.toUnmodifiableSet;
 import static java.util.stream.Collectors.toMap;
 

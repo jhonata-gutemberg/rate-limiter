@@ -1,6 +1,6 @@
 package dev.gutemberg.rate.limiter.domain.token.bucket.models;
 
-import dev.gutemberg.rate.limiter.domain.models.RateLimitConfig.Limit.Unit;
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit.Unit;
 
 public class TokenBucketKeyBuilder {
     private TokenBucketKeyBuilder() {}

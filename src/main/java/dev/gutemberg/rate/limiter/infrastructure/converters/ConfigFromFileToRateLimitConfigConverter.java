@@ -1,14 +1,14 @@
 package dev.gutemberg.rate.limiter.infrastructure.converters;
 
-import dev.gutemberg.rate.limiter.domain.models.RateLimitConfig;
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig;
 import dev.gutemberg.rate.limiter.infrastructure.contracts.Converter;
 import dev.gutemberg.rate.limiter.infrastructure.models.RateLimitConfigFromFile;
 import org.springframework.stereotype.Component;
 import java.util.stream.Collectors;
 
-import static dev.gutemberg.rate.limiter.domain.models.RateLimitConfig.Limit;
-import static dev.gutemberg.rate.limiter.domain.models.RateLimitConfig.Limit.By;
-import static dev.gutemberg.rate.limiter.domain.models.RateLimitConfig.Limit.Unit;
+import static dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit;
+import static dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit.By;
+import static dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit.Unit;
 
 @Component
 public class ConfigFromFileToRateLimitConfigConverter implements Converter<RateLimitConfigFromFile, RateLimitConfig> {

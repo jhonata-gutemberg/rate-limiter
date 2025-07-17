@@ -1,15 +1,13 @@
-package dev.gutemberg.rate.limiter.domain.usecases;
+package dev.gutemberg.rate.limiter.domain.rate.limit.usecases;
 
-import dev.gutemberg.rate.limiter.domain.models.RateLimitConfigKeyBuilder;
-import dev.gutemberg.rate.limiter.domain.models.RateLimitConfig;
-import dev.gutemberg.rate.limiter.domain.models.RateLimitConfig.Limit;
-import dev.gutemberg.rate.limiter.domain.models.RateLimitConfig.Limit.By;
-import dev.gutemberg.rate.limiter.domain.rate.limit.models.ApplyRateLimitUseCaseInput;
-import dev.gutemberg.rate.limiter.domain.rate.limit.models.ApplyRateLimitUseCaseOutput;
-import dev.gutemberg.rate.limiter.domain.rate.limit.models.ApplyRateLimitUseCaseOutput.Allowed;
-import dev.gutemberg.rate.limiter.domain.repositories.RateLimitConfigCacheRepository;
-import dev.gutemberg.rate.limiter.domain.repositories.TokenBucketRepository;
-import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucketKeyBuilder;
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig;
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit;
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit.By;
+import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.ApplyRateLimitUseCaseInput;
+import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.ApplyRateLimitUseCaseOutput;
+import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.ApplyRateLimitUseCaseOutput.Allowed;
+import dev.gutemberg.rate.limiter.domain.rate.limit.repositories.RateLimitConfigCacheRepository;
+import dev.gutemberg.rate.limiter.domain.token.bucket.repositories.TokenBucketRepository;
 import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucket;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +28,7 @@ public class ApplyRateLimitUseCase {
     }
 
     public ApplyRateLimitUseCaseOutput perform(final ApplyRateLimitUseCaseInput input) {
-        return rateLimitConfigCacheRepository.findOneByKey(RateLimitConfigKeyBuilder.build(input))
+        return rateLimitConfigCacheRepository.findOneByKey(RateLimitConfig.KeyBuilder.build(input))
                 .map(toOutput(input))
                 .orElseGet(ApplyRateLimitUseCaseOutput::allow);
     }
@@ -56,7 +54,7 @@ public class ApplyRateLimitUseCase {
             final Map<By, String> identifiers
     ) {
         final var identifier = identifiers.get(limit.by());
-        final var key = TokenBucketKeyBuilder.build(configKey, identifier, limit.unit());
+        final var key = TokenBucket.KeyBuilder.build(configKey, identifier, limit.unit());
         return tokenBucketRepository.findOneByKey(key)
                 .orElseGet(() -> new TokenBucket(key, limit.requestsPerUnit()));
     }
