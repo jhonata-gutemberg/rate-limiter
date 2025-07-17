@@ -1,4 +1,4 @@
-package dev.gutemberg.rate.limiter.infrastructure.repositories.redis;
+package dev.gutemberg.rate.limiter.infrastructure.redis.repositories;
 
 import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig;
 import dev.gutemberg.rate.limiter.domain.rate.limit.repositories.RateLimitConfigCacheRepository;
@@ -11,11 +11,13 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import static dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit;
+
 @Repository
 public class RedisRateLimitConfigCacheRepository implements RateLimitConfigCacheRepository {
-    private final RedisTemplate<String, RateLimitConfig.Limit> redisTemplate;
+    private final RedisTemplate<String, Limit> redisTemplate;
 
-    public RedisRateLimitConfigCacheRepository(final RedisTemplate<String, RateLimitConfig.Limit> redisTemplate) {
+    public RedisRateLimitConfigCacheRepository(final RedisTemplate<String, Limit> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
@@ -31,7 +33,7 @@ public class RedisRateLimitConfigCacheRepository implements RateLimitConfigCache
         }
     }
 
-    private Function<Set<RateLimitConfig.Limit>, Optional<RateLimitConfig>> getConfig(final String key) {
+    private Function<Set<Limit>, Optional<RateLimitConfig>> getConfig(final String key) {
         return values -> values.isEmpty() ? Optional.empty() : Optional.of(new RateLimitConfig(key, values));
     }
 

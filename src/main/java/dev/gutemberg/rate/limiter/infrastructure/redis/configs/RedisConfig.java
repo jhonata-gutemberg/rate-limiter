@@ -1,4 +1,4 @@
-package dev.gutemberg.rate.limiter.infrastructure.configs;
+package dev.gutemberg.rate.limiter.infrastructure.redis.configs;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
