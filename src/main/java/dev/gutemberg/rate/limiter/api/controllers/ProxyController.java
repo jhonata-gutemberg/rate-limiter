@@ -1,7 +1,6 @@
 package dev.gutemberg.rate.limiter.api.controllers;
 
-import dev.gutemberg.rate.limiter.api.models.RateLimitHttpHeadersBuilder;
-import dev.gutemberg.rate.limiter.domain.models.RateLimitRequest;
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.ApplyRateLimitUseCaseInput;
 import dev.gutemberg.rate.limiter.domain.usecases.ApplyRateLimitUseCase;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.convert.converter.Converter;
@@ -13,38 +12,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.Objects;
 
+import static dev.gutemberg.rate.limiter.api.models.RateLimitHttpHeadersBuilder.*;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RestController
 public class ProxyController {
-    private final Converter<Pair<HttpMethod, HttpServletRequest>, RateLimitRequest>
-            httpMethodAndRequestToRateLimitRequestConverter;
+    private final Converter<Pair<HttpMethod, HttpServletRequest>, ApplyRateLimitUseCaseInput>
+            httpMethodAndRequestToApplyRateLimitUseCaseInputConverter;
     private final ApplyRateLimitUseCase applyRateLimitUseCase;
 
     public ProxyController(
-            final Converter<Pair<HttpMethod, HttpServletRequest>, RateLimitRequest>
-                    httpMethodAndRequestToRateLimitRequestConverter,
+            final Converter<Pair<HttpMethod, HttpServletRequest>, ApplyRateLimitUseCaseInput>
+                    httpMethodAndRequestToApplyRateLimitUseCaseInputConverter,
             final ApplyRateLimitUseCase applyRateLimitUseCase
     ) {
-        this.httpMethodAndRequestToRateLimitRequestConverter = httpMethodAndRequestToRateLimitRequestConverter;
+        this.httpMethodAndRequestToApplyRateLimitUseCaseInputConverter =
+                httpMethodAndRequestToApplyRateLimitUseCaseInputConverter;
         this.applyRateLimitUseCase = applyRateLimitUseCase;
     }
 
     @RequestMapping(value = "/**", method = {GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE})
     public ResponseEntity<Void> proxy(final HttpMethod method, final HttpServletRequest request) {
-        final var rateLimitRequest = Objects.requireNonNull(
-                httpMethodAndRequestToRateLimitRequestConverter.convert(Pair.of(method, request))
+        final var input = Objects.requireNonNull(
+                httpMethodAndRequestToApplyRateLimitUseCaseInputConverter.convert(Pair.of(method, request))
         );
-        final var rateLimitResponse = applyRateLimitUseCase.perform(rateLimitRequest);
-        if (rateLimitResponse.hasRequestDenied()) {
-            return new ResponseEntity<>(
-                    RateLimitHttpHeadersBuilder.denied(rateLimitResponse.requestDenied()),
-                    HttpStatus.TOO_MANY_REQUESTS
-            );
-        }
-        return new ResponseEntity<>(
-                RateLimitHttpHeadersBuilder.allowed(rateLimitResponse.requestAllowed()),
-                HttpStatus.OK
-        );
+        final var output = applyRateLimitUseCase.perform(input);
+        return output.isAllowed() ?
+                new ResponseEntity<>(buildHeaders(output.allowed()), HttpStatus.OK) :
+                new ResponseEntity<>(buildHeaders(output.denied()), HttpStatus.TOO_MANY_REQUESTS);
     }
 }

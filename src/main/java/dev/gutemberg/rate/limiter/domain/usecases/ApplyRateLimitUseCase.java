@@ -1,17 +1,20 @@
 package dev.gutemberg.rate.limiter.domain.usecases;
 
-import dev.gutemberg.rate.limiter.domain.enums.RateUnit;
-import dev.gutemberg.rate.limiter.domain.models.*;
-import dev.gutemberg.rate.limiter.domain.models.RateLimitConfig.Limit.Unit;
+import dev.gutemberg.rate.limiter.domain.models.RateLimitConfigKeyBuilder;
+import dev.gutemberg.rate.limiter.domain.models.RateLimitConfig;
+import dev.gutemberg.rate.limiter.domain.models.RateLimitConfig.Limit;
+import dev.gutemberg.rate.limiter.domain.models.RateLimitConfig.Limit.By;
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.ApplyRateLimitUseCaseInput;
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.ApplyRateLimitUseCaseOutput;
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.ApplyRateLimitUseCaseOutput.Allowed;
 import dev.gutemberg.rate.limiter.domain.repositories.RateLimitConfigCacheRepository;
 import dev.gutemberg.rate.limiter.domain.repositories.TokenBucketRepository;
+import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucketKeyBuilder;
+import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucket;
 import org.springframework.stereotype.Service;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.function.Function;
 
-import static dev.gutemberg.rate.limiter.domain.models.RateLimitResponse.*;
+import java.util.Map;
+import java.util.function.Function;
 
 @Service
 public class ApplyRateLimitUseCase {
@@ -26,50 +29,40 @@ public class ApplyRateLimitUseCase {
         this.tokenBucketRepository = tokenBucketRepository;
     }
 
-    public RateLimitResponse perform(final RateLimitRequest request) {
-        final var key = request.action().name().toLowerCase() + ":" + request.resource();
-        return rateLimitConfigCacheRepository.findOneByKey(key)
-                .map(allowOrDenyRequest(request))
-                .orElse(allowRequest());
+    public ApplyRateLimitUseCaseOutput perform(final ApplyRateLimitUseCaseInput input) {
+        return rateLimitConfigCacheRepository.findOneByKey(RateLimitConfigKeyBuilder.build(input))
+                .map(toOutput(input))
+                .orElseGet(ApplyRateLimitUseCaseOutput::allow);
     }
 
-    private Function<RateLimitConfig, RateLimitResponse> allowOrDenyRequest(final RateLimitRequest request) {
+    private Function<RateLimitConfig, ApplyRateLimitUseCaseOutput> toOutput(final ApplyRateLimitUseCaseInput input) {
         return config -> {
-            final Map<Unit, Integer> remainingRequests = new EnumMap<>(Unit.class);
-            try (final var executor = Executors.newVirtualThreadPerTaskExecutor()) {
-                for (final var limit: config.limits()) {
-                    final var unit = limit.unit();
-                    final var tokenBucket = getTokenBucket(config.key(), limit, request);
-                    if (!tokenBucket.hasAvailableTokens()) {
-                        return denyRequest(unit);
-                    }
-                    executor.submit(consumeToken(tokenBucket, remainingRequests, unit));
+            final var dataBuilder = Allowed.dataBuilder();
+            for (final var limit: config.limits()) {
+                final var tokenBucket = getTokenBucket(config.key(), limit, input.identifiers());
+                if (!tokenBucket.hasAvailableTokens()) {
+                    return ApplyRateLimitUseCaseOutput.deny();
                 }
+                consumeToken(tokenBucket);
+                dataBuilder.add(limit.unit(), limit.requestsPerUnit(), tokenBucket.availableTokens());
             }
-            return allowRequest(config, remainingRequests);
+            return ApplyRateLimitUseCaseOutput.allow(dataBuilder.build());
         };
     }
 
     private TokenBucket getTokenBucket(
             final String configKey,
-            final RateLimitConfig.Limit limit,
-            final RateLimitRequest request
+            final Limit limit,
+            final Map<By, String> identifiers
     ) {
-        final var identifier = request.identifiers().get(limit.by());
-        final var tokenBucketKey = new TokenBucketKey(configKey, identifier, limit.unit());
-        return tokenBucketRepository.findOneByKey(tokenBucketKey)
-                .orElseGet(() -> new TokenBucket(tokenBucketKey, limit.requestsPerUnit()));
+        final var identifier = identifiers.get(limit.by());
+        final var key = TokenBucketKeyBuilder.build(configKey, identifier, limit.unit());
+        return tokenBucketRepository.findOneByKey(key)
+                .orElseGet(() -> new TokenBucket(key, limit.requestsPerUnit()));
     }
 
-    private Runnable consumeToken(
-            final TokenBucket tokenBucket,
-            final Map<Unit, Integer> remainingRequests,
-            Unit rateUnit
-    ) {
-        return () -> {
-            tokenBucket.consumeToken();
-            remainingRequests.put(rateUnit, tokenBucket.availableTokens());
-            tokenBucketRepository.save(tokenBucket);
-        };
+    private void consumeToken(final TokenBucket tokenBucket) {
+        tokenBucket.consumeToken();
+        tokenBucketRepository.save(tokenBucket);
     }
 }

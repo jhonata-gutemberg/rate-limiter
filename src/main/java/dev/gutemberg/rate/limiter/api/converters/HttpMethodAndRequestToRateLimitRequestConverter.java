@@ -1,7 +1,7 @@
 package dev.gutemberg.rate.limiter.api.converters;
 
-import dev.gutemberg.rate.limiter.domain.enums.LimitedBy;
 import dev.gutemberg.rate.limiter.domain.enums.RateLimitRequestAction;
+import dev.gutemberg.rate.limiter.domain.models.RateLimitConfig;
 import dev.gutemberg.rate.limiter.domain.models.RateLimitRequest;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.convert.converter.Converter;
@@ -26,7 +26,7 @@ public class HttpMethodAndRequestToRateLimitRequestConverter
         final var action = httpMethodToRateLimitRequestActionConverter.convert(pair.getFirst());
         final var request = pair.getSecond();
         final var resource = request.getRequestURI().replace("/api/", "");
-        final Map<LimitedBy, String> identifiers = Map.of(LimitedBy.IP, request.getRemoteAddr());
+        final var identifiers = Map.of(RateLimitConfig.Limit.By.IP, request.getRemoteAddr());
         return new RateLimitRequest(action, resource, identifiers);
     }
 }

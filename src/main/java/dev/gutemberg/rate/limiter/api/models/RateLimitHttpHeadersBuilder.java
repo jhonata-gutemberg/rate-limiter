@@ -1,10 +1,10 @@
 package dev.gutemberg.rate.limiter.api.models;
 
-import dev.gutemberg.rate.limiter.domain.models.RateLimitConfig.Limit.Unit;
 import dev.gutemberg.rate.limiter.domain.models.RateLimitResponse;
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.ApplyRateLimitUseCaseOutput.Allowed;
 import org.springframework.http.HttpHeaders;
-import java.util.Map;
 import java.util.Set;
+import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
 public class RateLimitHttpHeadersBuilder {
@@ -20,26 +20,25 @@ public class RateLimitHttpHeadersBuilder {
         return headers;
     }
 
-    public static HttpHeaders allowed(final RateLimitResponse.RequestAllowed requestAllowed) {
-        final var rateUnits = requestAllowed.rateUnits();
+    public static HttpHeaders buildHeaders(final Allowed allowed) {
+        final var data = allowed.data();
         final var headers = new HttpHeaders();
-        if (!rateUnits.isEmpty()) {
-            headers.add(
-                    RATE_LIMIT_REQUESTS_REMAINING_HEADER,
-                    allowedHeaderValue(rateUnits, requestAllowed.remainingRequests())
-            );
-            headers.add(
-                    RATE_LIMIT_REQUESTS_LIMIT_HEADER,
-                    allowedHeaderValue(rateUnits, requestAllowed.requestsLimit())
-            );
-        }
+        headers.add(RATE_LIMIT_REQUESTS_REMAINING_HEADER, toString(data, Allowed.Info::requestsAvailable));
+        headers.add(RATE_LIMIT_REQUESTS_LIMIT_HEADER, toString(data, Allowed.Info::requestsPerUnit));
         return headers;
     }
 
-    private static String allowedHeaderValue(final Set<Unit> rateUnits, final Map<Unit, Integer> requests) {
-        final var parameterTemplate = "per-%s=%s";
-        return rateUnits.stream()
-                .map(rateUnit -> parameterTemplate.formatted(rateUnit, requests.get(rateUnit)))
+    public static HttpHeaders buildHeaders(final Denied denied) {
+        return new HttpHeaders();
+    }
+
+    private static String toString(Set<Allowed.Info> data, final ToIntFunction<Allowed.Info> requestsExtractor) {
+        return data.stream()
+                .map(info -> toString(info, requestsExtractor))
                 .collect(Collectors.joining(";"));
+    }
+
+    private static String toString(final Allowed.Info info, final ToIntFunction<Allowed.Info> requestsExtractor) {
+        return "per-%s=%s".formatted(info.unit().name().toLowerCase(), requestsExtractor.applyAsInt(info));
     }
 }

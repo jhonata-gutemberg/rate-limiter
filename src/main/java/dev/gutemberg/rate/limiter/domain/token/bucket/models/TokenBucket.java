@@ -1,15 +1,15 @@
-package dev.gutemberg.rate.limiter.domain.models;
+package dev.gutemberg.rate.limiter.domain.token.bucket.models;
 
 public class TokenBucket {
-    private final TokenBucketKey key;
+    private final String key;
     private int availableTokens;
 
-    public TokenBucket(final TokenBucketKey key, final int availableTokens) {
+    public TokenBucket(final String key, final int availableTokens) {
         this.key = key;
         this.availableTokens = availableTokens;
     }
 
-    public TokenBucketKey key() {
+    public String key() {
         return key;
     }
 
