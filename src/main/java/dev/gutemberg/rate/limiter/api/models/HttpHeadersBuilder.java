@@ -18,6 +18,9 @@ public class HttpHeadersBuilder {
     public static HttpHeaders build(final Allowed allowed) {
         final var data = allowed.data();
         final var headers = new HttpHeaders();
+        if (data.isEmpty()) {
+            return headers;
+        }
         headers.add(RATE_LIMIT_REQUESTS_REMAINING_HEADER, toString(data, Allowed.Info::requestsAvailable));
         headers.add(RATE_LIMIT_REQUESTS_LIMIT_HEADER, toString(data, Allowed.Info::requestsPerUnit));
         return headers;
