@@ -3,7 +3,7 @@ package dev.gutemberg.rate.limiter.infrastructure.s3.repositories;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig;
-import dev.gutemberg.rate.limiter.domain.rate.limit.repositories.RateLimitConfigRepository;
+import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.repositories.RateLimitConfigRepository;
 import dev.gutemberg.rate.limiter.infrastructure.commons.contracts.Converter;
 import dev.gutemberg.rate.limiter.infrastructure.s3.models.RateLimitConfigFromFile;
 import org.slf4j.Logger;

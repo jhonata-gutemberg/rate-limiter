@@ -1,7 +1,7 @@
 package dev.gutemberg.rate.limiter.infrastructure.redis.repositories;
 
 import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig;
-import dev.gutemberg.rate.limiter.domain.rate.limit.repositories.RateLimitConfigCacheRepository;
+import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.repositories.RateLimitConfigCacheRepository;
 import dev.gutemberg.rate.limiter.infrastructure.redis.contracts.RedisTemplateFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;

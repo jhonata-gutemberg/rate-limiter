@@ -1,4 +1,4 @@
-package dev.gutemberg.rate.limiter.domain.rate.limit.contracts;
+package dev.gutemberg.rate.limiter.domain.rate.limit.contracts.usecases;
 
 import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit.By;
 import java.util.Map;

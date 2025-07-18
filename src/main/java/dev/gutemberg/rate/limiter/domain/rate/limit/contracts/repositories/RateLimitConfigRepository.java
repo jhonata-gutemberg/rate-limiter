@@ -1,4 +1,4 @@
-package dev.gutemberg.rate.limiter.domain.rate.limit.repositories;
+package dev.gutemberg.rate.limiter.domain.rate.limit.contracts.repositories;
 
 import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig;
 import java.util.Set;

@@ -2,7 +2,7 @@ package dev.gutemberg.rate.limiter.api.controllers;
 
 import dev.gutemberg.rate.limiter.api.contracts.Converter;
 import dev.gutemberg.rate.limiter.api.models.HttpHeadersBuilder;
-import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.ApplyRateLimitUseCaseInput;
+import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.usecases.ApplyRateLimitUseCaseInput;
 import dev.gutemberg.rate.limiter.domain.rate.limit.usecases.ApplyRateLimitUseCase;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.util.Pair;

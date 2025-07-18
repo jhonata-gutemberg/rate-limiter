@@ -1,7 +1,7 @@
 package dev.gutemberg.rate.limiter.domain.rate.limit.usecases;
 
-import dev.gutemberg.rate.limiter.domain.rate.limit.repositories.RateLimitConfigCacheRepository;
-import dev.gutemberg.rate.limiter.domain.rate.limit.repositories.RateLimitConfigRepository;
+import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.repositories.RateLimitConfigCacheRepository;
+import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.repositories.RateLimitConfigRepository;
 import org.springframework.stereotype.Service;
 
 @Service
