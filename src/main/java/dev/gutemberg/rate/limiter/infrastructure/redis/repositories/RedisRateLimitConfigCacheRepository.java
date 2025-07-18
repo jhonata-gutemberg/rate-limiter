@@ -2,6 +2,7 @@ package dev.gutemberg.rate.limiter.infrastructure.redis.repositories;
 
 import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig;
 import dev.gutemberg.rate.limiter.domain.rate.limit.repositories.RateLimitConfigCacheRepository;
+import dev.gutemberg.rate.limiter.infrastructure.redis.contracts.RedisTemplateFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
@@ -17,8 +18,8 @@ import static dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfi
 public class RedisRateLimitConfigCacheRepository implements RateLimitConfigCacheRepository {
     private final RedisTemplate<String, Limit> redisTemplate;
 
-    public RedisRateLimitConfigCacheRepository(final RedisTemplate<String, Limit> redisTemplate) {
-        this.redisTemplate = redisTemplate;
+    public RedisRateLimitConfigCacheRepository(final RedisTemplateFactory redisTemplateFactory) {
+        this.redisTemplate = redisTemplateFactory.getTemplate(Limit.class);
     }
 
     @Override
