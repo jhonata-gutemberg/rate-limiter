@@ -12,31 +12,28 @@ import java.util.function.Function;
 
 @Repository
 public class RedisTokenBucketRepository implements TokenBucketRepository {
-    private final RedisTemplate<String, TokenBucketValue> redisTemplate;
+    private final RedisTemplate<String, TokenBucket> redisTemplate;
 
     public RedisTokenBucketRepository(final RedisTemplateFactory redisTemplateFactory) {
-        this.redisTemplate = redisTemplateFactory.getTemplate(TokenBucketValue.class);
+        this.redisTemplate = redisTemplateFactory.getTemplate(TokenBucket.class);
     }
 
     @Override
-    public Optional<TokenBucket> findOneByKey(final String key) {
-        return Optional.ofNullable(this.redisTemplate.opsForValue().get(key))
-                .map(toTokenBucket(key));
+    public Optional<TokenBucket> findOneByConfigKeyAndIdentifier(final String configKey, String identifier) {
+        final Function<Object, TokenBucket> toTokenBucket = object -> {
+            final var value = (TokenBucketValue) object;
+            return new TokenBucket(identifier, value.availableTokens(), value.nextRefillAt());
+        };
+        final var value = this.redisTemplate.opsForHash().entries(configKey).get(identifier);
+        return Optional.ofNullable(value).map(toTokenBucket);
     }
 
     @Override
-    public void save(final TokenBucket tokenBucket) {
+    public void save(final String configKey, final TokenBucket tokenBucket) {
         try (final var executor = Executors.newVirtualThreadPerTaskExecutor()) {
-            executor.submit(saveAsync(tokenBucket));
+            final Runnable saveAsync = () -> this.redisTemplate.opsForHash()
+                    .put(configKey, tokenBucket.identifier(), TokenBucketValue.from(tokenBucket));
+            executor.submit(saveAsync);
         }
-    }
-
-    private Function<TokenBucketValue, TokenBucket> toTokenBucket(final String key) {
-        return value -> new TokenBucket(key, value.availableTokens());
-    }
-
-    private Runnable saveAsync(final TokenBucket tokenBucket) {
-        return () -> this.redisTemplate.opsForValue()
-                .set(tokenBucket.key(), TokenBucketValue.from(tokenBucket));
     }
 }

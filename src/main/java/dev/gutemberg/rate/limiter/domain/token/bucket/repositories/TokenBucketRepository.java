@@ -4,6 +4,6 @@ import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucket;
 import java.util.Optional;
 
 public interface TokenBucketRepository {
-    Optional<TokenBucket> findOneByKey(String tokenBucketKey);
-    void save(TokenBucket tokenBucket);
+    Optional<TokenBucket> findOneByConfigKeyAndIdentifier(String configKey, String identifier);
+    void save(String configKey, TokenBucket tokenBucket);
 }

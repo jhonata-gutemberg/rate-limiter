@@ -1,66 +1,74 @@
 package dev.gutemberg.rate.limiter.domain.rate.limit.usecases;
 
+import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.schedulers.TokenBucketRefillScheduler;
 import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig;
-import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit;
-import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit.By;
 import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.usecases.ApplyRateLimitUseCaseInput;
 import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.usecases.ApplyRateLimitUseCaseOutput;
 import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.usecases.ApplyRateLimitUseCaseOutput.Allowed;
 import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.repositories.RateLimitConfigCacheRepository;
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit;
+import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucketConfig;
+import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucketRefill;
 import dev.gutemberg.rate.limiter.domain.token.bucket.repositories.TokenBucketRepository;
 import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucket;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
+import java.time.Instant;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 @Service
 public class ApplyRateLimitUseCase {
     private final RateLimitConfigCacheRepository rateLimitConfigCacheRepository;
     private final TokenBucketRepository tokenBucketRepository;
+    private final TokenBucketRefillScheduler tokenBucketRefillScheduler;
 
     public ApplyRateLimitUseCase(
             final RateLimitConfigCacheRepository rateLimitConfigCacheRepository,
-            final TokenBucketRepository tokenBucketRepository
+            final TokenBucketRepository tokenBucketRepository,
+            final TokenBucketRefillScheduler tokenBucketRefillScheduler
     ) {
         this.rateLimitConfigCacheRepository = rateLimitConfigCacheRepository;
         this.tokenBucketRepository = tokenBucketRepository;
+        this.tokenBucketRefillScheduler = tokenBucketRefillScheduler;
     }
 
     public ApplyRateLimitUseCaseOutput perform(final ApplyRateLimitUseCaseInput input) {
+        final var toOutput = allowOrDeny(input);
         return rateLimitConfigCacheRepository.findOneByKey(RateLimitConfig.KeyBuilder.build(input))
-                .map(toOutput(input))
+                .map(toOutput)
                 .orElseGet(ApplyRateLimitUseCaseOutput::allow);
     }
 
-    private Function<RateLimitConfig, ApplyRateLimitUseCaseOutput> toOutput(final ApplyRateLimitUseCaseInput input) {
+    private Function<RateLimitConfig, ApplyRateLimitUseCaseOutput> allowOrDeny(final ApplyRateLimitUseCaseInput input) {
         return config -> {
             final var dataBuilder = Allowed.dataBuilder();
             for (final var limit: config.limits()) {
-                final var tokenBucket = getTokenBucket(config.key(), limit, input.identifiers());
+                final var tokenBucketConfigKey = TokenBucketConfig.KeyBuilder.build(config.key(), limit.unit());
+                final var identifier = input.identifiers().get(limit.by());
+                final var create = createTokenBucket(tokenBucketConfigKey, identifier, limit);
+                final var tokenBucket = tokenBucketRepository
+                        .findOneByConfigKeyAndIdentifier(tokenBucketConfigKey, identifier)
+                        .orElseGet(create);
                 if (!tokenBucket.hasAvailableTokens()) {
                     return ApplyRateLimitUseCaseOutput.deny();
                 }
-                consumeToken(tokenBucket);
+                tokenBucket.consumeToken();
+                tokenBucketRepository.save(tokenBucketConfigKey, tokenBucket);
                 dataBuilder.add(limit.unit(), limit.requestsPerUnit(), tokenBucket.availableTokens());
             }
             return ApplyRateLimitUseCaseOutput.allow(dataBuilder.build());
         };
     }
 
-    private TokenBucket getTokenBucket(
-            final String configKey,
-            final Limit limit,
-            final Map<By, String> identifiers
-    ) {
-        final var identifier = identifiers.get(limit.by());
-        final var key = TokenBucket.KeyBuilder.build(configKey, identifier, limit.unit());
-        return tokenBucketRepository.findOneByKey(key)
-                .orElseGet(() -> new TokenBucket(key, limit.requestsPerUnit()));
-    }
-
-    private void consumeToken(final TokenBucket tokenBucket) {
-        tokenBucket.consumeToken();
-        tokenBucketRepository.save(tokenBucket);
+    private Supplier<TokenBucket> createTokenBucket(final String configKey, final String identifier, final Limit limit) {
+        return () -> {
+            final var requestsPerUnit = limit.requestsPerUnit();
+            final var nextRefillAt = Instant.now().plus(1, limit.unit().temporal());
+            final var tokenBucket = new TokenBucket(identifier, requestsPerUnit, nextRefillAt);
+            final var refill = new TokenBucketRefill(configKey, identifier, requestsPerUnit);
+            tokenBucketRepository.save(configKey, tokenBucket);
+            tokenBucketRefillScheduler.schedule(refill, nextRefillAt);
+            return tokenBucket;
+        };
     }
 }

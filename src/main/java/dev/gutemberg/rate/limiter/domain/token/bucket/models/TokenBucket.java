@@ -1,18 +1,20 @@
 package dev.gutemberg.rate.limiter.domain.token.bucket.models;
 
-import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit.Unit;
+import java.time.Instant;
 
 public class TokenBucket {
-    private final String key;
+    private final String identifier;
     private int availableTokens;
+    private final Instant nextRefillAt;
 
-    public TokenBucket(final String key, final int availableTokens) {
-        this.key = key;
+    public TokenBucket(final String identifier, final int availableTokens, final Instant nextRefillAt) {
+        this.identifier = identifier;
         this.availableTokens = availableTokens;
+        this.nextRefillAt = nextRefillAt;
     }
 
-    public String key() {
-        return key;
+    public String identifier() {
+        return identifier;
     }
 
     public int availableTokens() {
@@ -27,11 +29,7 @@ public class TokenBucket {
         availableTokens--;
     }
 
-    public static class KeyBuilder {
-        private KeyBuilder() {}
-
-        public static String build(final String configKey, final String limitIdentifier, final Unit rateUnit) {
-            return configKey + ":" + limitIdentifier + ":" + rateUnit;
-        }
+    public Instant nextRefillAt() {
+        return nextRefillAt;
     }
 }

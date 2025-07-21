@@ -1,6 +1,8 @@
 package dev.gutemberg.rate.limiter.domain.rate.limit.models;
 
 import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.usecases.ApplyRateLimitUseCaseInput;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Set;
 
 public record RateLimitConfig(String key, Set<Limit> limits) {
@@ -19,10 +21,20 @@ public record RateLimitConfig(String key, Set<Limit> limits) {
         }
 
         public enum Unit {
-            SECOND,
-            MINUTE,
-            HOUR,
-            DAY
+            SECOND(ChronoUnit.SECONDS),
+            MINUTE(ChronoUnit.MINUTES),
+            HOUR(ChronoUnit.HOURS),
+            DAY(ChronoUnit.DAYS);
+
+            private final TemporalUnit temporal;
+
+            Unit(final TemporalUnit temporal) {
+                this.temporal = temporal;
+            }
+
+            public TemporalUnit temporal() {
+                return temporal;
+            }
         }
     }
 }
