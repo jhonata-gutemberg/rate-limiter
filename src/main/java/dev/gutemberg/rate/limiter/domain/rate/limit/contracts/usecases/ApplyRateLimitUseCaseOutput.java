@@ -1,7 +1,6 @@
 package dev.gutemberg.rate.limiter.domain.rate.limit.contracts.usecases;
 
-import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig;
-
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit.Unit;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,12 +39,12 @@ public record ApplyRateLimitUseCaseOutput(Allowed allowed, Denied denied) {
             return new DataBuilder();
         }
 
-        public record Info(RateLimitConfig.Limit.Unit unit, int requestsPerUnit, int requestsAvailable) {}
+        public record Info(Unit unit, int requestsPerUnit, int requestsAvailable) {}
 
         public static class DataBuilder {
             final Set<Info> data = new HashSet<>();
 
-            public void add(RateLimitConfig.Limit.Unit unit, int requestsPerUnit, int requestsAvailable) {
+            public void add(Unit unit, int requestsPerUnit, int requestsAvailable) {
                 data.add(new Info(unit, requestsPerUnit, requestsAvailable));
             }
 
