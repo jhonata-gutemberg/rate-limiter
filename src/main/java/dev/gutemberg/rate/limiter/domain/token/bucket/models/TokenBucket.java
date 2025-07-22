@@ -5,7 +5,7 @@ import java.time.Instant;
 public class TokenBucket {
     private final String identifier;
     private int availableTokens;
-    private final Instant nextRefillAt;
+    private Instant nextRefillAt;
 
     public TokenBucket(final String identifier, final int availableTokens, final Instant nextRefillAt) {
         this.identifier = identifier;
@@ -23,6 +23,11 @@ public class TokenBucket {
 
     public boolean hasAvailableTokens() {
         return availableTokens > 0;
+    }
+
+    public void refill(final TokenBucketRefill refill) {
+        availableTokens = refill.refillRate();
+        nextRefillAt = Instant.now().plus(1, refill.unit().temporal());
     }
 
     public void consumeToken() {
