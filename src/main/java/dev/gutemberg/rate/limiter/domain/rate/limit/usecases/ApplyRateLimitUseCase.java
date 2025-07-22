@@ -50,7 +50,7 @@ public class ApplyRateLimitUseCase {
                         .findOneByConfigKeyAndIdentifier(tokenBucketConfigKey, identifier)
                         .orElseGet(create);
                 if (!tokenBucket.hasAvailableTokens()) {
-                    return ApplyRateLimitUseCaseOutput.deny();
+                    return ApplyRateLimitUseCaseOutput.deny(tokenBucket.nextRefillAt());
                 }
                 tokenBucket.consumeToken();
                 tokenBucketRepository.save(tokenBucketConfigKey, tokenBucket);
@@ -63,11 +63,12 @@ public class ApplyRateLimitUseCase {
     private Supplier<TokenBucket> createTokenBucket(final String configKey, final String identifier, final Limit limit) {
         return () -> {
             final var requestsPerUnit = limit.requestsPerUnit();
-            final var nextRefillAt = Instant.now().plus(1, limit.unit().temporal());
+            final var unit = limit.unit();
+            final var nextRefillAt = Instant.now().plus(1, unit.temporal());
             final var tokenBucket = new TokenBucket(identifier, requestsPerUnit, nextRefillAt);
-            final var refill = new TokenBucketRefill(configKey, identifier, requestsPerUnit);
+            final var refill = new TokenBucketRefill(configKey, identifier, requestsPerUnit, unit);
             tokenBucketRepository.save(configKey, tokenBucket);
-            tokenBucketRefillScheduler.schedule(refill, nextRefillAt);
+            tokenBucketRefillScheduler.schedule(refill);
             return tokenBucket;
         };
     }

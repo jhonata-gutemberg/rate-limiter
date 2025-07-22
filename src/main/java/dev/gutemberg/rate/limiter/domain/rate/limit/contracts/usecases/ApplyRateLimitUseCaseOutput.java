@@ -2,6 +2,7 @@ package dev.gutemberg.rate.limiter.domain.rate.limit.contracts.usecases;
 
 import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,8 +23,8 @@ public record ApplyRateLimitUseCaseOutput(Allowed allowed, Denied denied) {
         return new ApplyRateLimitUseCaseOutput(new Allowed());
     }
 
-    public static ApplyRateLimitUseCaseOutput deny() {
-        return new ApplyRateLimitUseCaseOutput(new Denied());
+    public static ApplyRateLimitUseCaseOutput deny(final Instant nextRefillAt) {
+        return new ApplyRateLimitUseCaseOutput(new Denied(nextRefillAt));
     }
 
     public boolean isAllowed() {
@@ -54,5 +55,5 @@ public record ApplyRateLimitUseCaseOutput(Allowed allowed, Denied denied) {
         }
     }
 
-    public record Denied() {}
+    public record Denied(Instant nextRefillAt) {}
 }
