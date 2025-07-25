@@ -7,7 +7,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -30,7 +29,8 @@ public class RedisRateLimitConfigCacheRepository implements RateLimitConfigCache
     @Override
     public void save(final Set<RateLimitConfig> configs) {
         try (final var executor = Executors.newVirtualThreadPerTaskExecutor()) {
-            configs.forEach(submit(executor));
+            final Consumer<RateLimitConfig> submit = config -> executor.submit(save(config));
+            configs.forEach(submit);
         }
     }
 
@@ -38,15 +38,7 @@ public class RedisRateLimitConfigCacheRepository implements RateLimitConfigCache
         return values -> values.isEmpty() ? Optional.empty() : Optional.of(new RateLimitConfig(key, values));
     }
 
-    private Consumer<RateLimitConfig> submit(final ExecutorService executor) {
-        return config -> executor.submit(save(config));
-    }
-
     private Runnable save(final RateLimitConfig config) {
-        return () -> {
-            final var key = config.key();
-            redisTemplate.delete(key);
-            config.limits().forEach(limit -> redisTemplate.opsForSet().add(key, limit));
-        };
+        return () -> config.limits().forEach(limit -> redisTemplate.opsForSet().add(config.key(), limit));
     }
 }

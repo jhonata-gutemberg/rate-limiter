@@ -1,4 +1,4 @@
-package dev.gutemberg.rate.limiter.infrastructure.spring;
+package dev.gutemberg.rate.limiter.infrastructure.spring.factories;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.gutemberg.rate.limiter.infrastructure.redis.contracts.RedisTemplateFactory;

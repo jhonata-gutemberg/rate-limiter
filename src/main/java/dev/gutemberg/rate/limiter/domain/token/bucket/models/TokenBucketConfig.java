@@ -7,7 +7,7 @@ public record TokenBucketConfig(String key) {
         private KeyBuilder() {}
 
         public static String build(final String rateLimitConfigKey, final Unit unit) {
-            return rateLimitConfigKey + ":" + unit;
+            return rateLimitConfigKey + ":" + unit.name().toLowerCase();
         }
     }
 }

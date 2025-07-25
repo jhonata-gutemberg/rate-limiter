@@ -12,10 +12,10 @@ import java.util.function.Function;
 
 @Repository
 public class RedisTokenBucketRepository implements TokenBucketRepository {
-    private final RedisTemplate<String, TokenBucket> redisTemplate;
+    private final RedisTemplate<String, TokenBucketValue> redisTemplate;
 
     public RedisTokenBucketRepository(final RedisTemplateFactory redisTemplateFactory) {
-        this.redisTemplate = redisTemplateFactory.getTemplate(TokenBucket.class);
+        this.redisTemplate = redisTemplateFactory.getTemplate(TokenBucketValue.class);
     }
 
     @Override

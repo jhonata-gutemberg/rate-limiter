@@ -5,8 +5,8 @@ import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit
 import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucketRefill;
 import dev.gutemberg.rate.limiter.domain.token.bucket.usecases.TokenBucketRefillUseCase;
 import org.jobrunr.scheduling.JobScheduler;
+import org.jobrunr.scheduling.cron.Cron;
 import org.springframework.stereotype.Component;
-import java.time.Instant;
 import java.util.Map;
 
 import static dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit.Unit.*;
@@ -14,10 +14,10 @@ import static dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfi
 @Component
 public class JobRunrTokenBucketRefillScheduler implements TokenBucketRefillScheduler {
     private static final Map<Unit, String> CRON = Map.of(
-            SECOND, "*/1 * * * * *",
-            MINUTE, "* */1 * * * *",
-            HOUR, "* * */1 * * *",
-            DAY, "* * * */1 * *"
+            SECOND, "* * * * * *",
+            MINUTE, Cron.minutely(),
+            HOUR, Cron.hourly(),
+            DAY, Cron.daily()
     );
 
     private final JobScheduler jobScheduler;
