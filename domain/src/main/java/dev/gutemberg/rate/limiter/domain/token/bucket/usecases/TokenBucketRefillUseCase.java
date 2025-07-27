@@ -2,9 +2,9 @@ package dev.gutemberg.rate.limiter.domain.token.bucket.usecases;
 
 import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucketRefill;
 import dev.gutemberg.rate.limiter.domain.token.bucket.repositories.TokenBucketRepository;
-import org.springframework.stereotype.Service;
+import jakarta.inject.Named;
 
-@Service
+@Named
 public class TokenBucketRefillUseCase {
     private final TokenBucketRepository tokenBucketRepository;
 

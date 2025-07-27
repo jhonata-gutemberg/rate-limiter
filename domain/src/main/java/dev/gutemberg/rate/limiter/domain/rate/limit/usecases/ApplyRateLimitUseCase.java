@@ -11,12 +11,12 @@ import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucketConfig;
 import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucketRefill;
 import dev.gutemberg.rate.limiter.domain.token.bucket.repositories.TokenBucketRepository;
 import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucket;
-import org.springframework.stereotype.Service;
+import jakarta.inject.Named;
 import java.time.Instant;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-@Service
+@Named
 public class ApplyRateLimitUseCase {
     private final RateLimitConfigCacheRepository rateLimitConfigCacheRepository;
     private final TokenBucketRepository tokenBucketRepository;
