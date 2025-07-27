@@ -1,2 +1,4 @@
 rootProject.name = 'rate-limiter'
-include 'domain', 'others'
+include 'domain'
+include 'others'
+include 'infrastructure'

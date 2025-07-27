@@ -1,4 +1,4 @@
-package dev.gutemberg.rate.limiter.infrastructure.spring.configs;
+package infrastructure.spring.configs;
 
 import org.jobrunr.jobs.mappers.JobMapper;
 import org.jobrunr.storage.InMemoryStorageProvider;

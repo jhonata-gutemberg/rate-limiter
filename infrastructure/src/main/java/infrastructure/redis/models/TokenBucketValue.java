@@ -1,4 +1,4 @@
-package dev.gutemberg.rate.limiter.infrastructure.redis.models;
+package infrastructure.redis.models;
 
 import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucket;
 import java.time.Instant;

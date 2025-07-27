@@ -1,7 +1,7 @@
-package dev.gutemberg.rate.limiter.infrastructure.spring.factories;
+package infrastructure.spring.factories;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.gutemberg.rate.limiter.infrastructure.redis.contracts.RedisTemplateFactory;
+import infrastructure.redis.contracts.RedisTemplateFactory;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;

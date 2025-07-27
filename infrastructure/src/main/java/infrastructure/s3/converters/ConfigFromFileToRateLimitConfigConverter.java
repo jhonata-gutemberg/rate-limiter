@@ -1,7 +1,7 @@
-package dev.gutemberg.rate.limiter.infrastructure.s3.converters;
+package infrastructure.s3.converters;
 
 import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig;
-import dev.gutemberg.rate.limiter.infrastructure.s3.models.RateLimitConfigFromFile;
+import infrastructure.s3.models.RateLimitConfigFromFile;
 import java.util.stream.Collectors;
 
 import static dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit;

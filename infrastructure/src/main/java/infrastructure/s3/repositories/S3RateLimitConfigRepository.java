@@ -1,11 +1,11 @@
-package dev.gutemberg.rate.limiter.infrastructure.s3.repositories;
+package infrastructure.s3.repositories;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig;
 import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.repositories.RateLimitConfigRepository;
-import dev.gutemberg.rate.limiter.infrastructure.s3.converters.ConfigFromFileToRateLimitConfigConverter;
-import dev.gutemberg.rate.limiter.infrastructure.s3.models.RateLimitConfigFromFile;
+import infrastructure.s3.converters.ConfigFromFileToRateLimitConfigConverter;
+import infrastructure.s3.models.RateLimitConfigFromFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ResourceLoader;

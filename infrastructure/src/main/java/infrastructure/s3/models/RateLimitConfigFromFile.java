@@ -1,4 +1,4 @@
-package dev.gutemberg.rate.limiter.infrastructure.s3.models;
+package infrastructure.s3.models;
 
 import java.util.Objects;
 import java.util.Set;

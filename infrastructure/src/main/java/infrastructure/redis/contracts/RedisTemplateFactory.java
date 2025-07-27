@@ -1,4 +1,4 @@
-package dev.gutemberg.rate.limiter.infrastructure.redis.contracts;
+package infrastructure.redis.contracts;
 
 import org.springframework.data.redis.core.RedisTemplate;
 

@@ -1,4 +1,4 @@
-package dev.gutemberg.rate.limiter.infrastructure.jobrunr;
+package infrastructure.jobrunr;
 
 import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.schedulers.TokenBucketRefillScheduler;
 import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit.Unit;
