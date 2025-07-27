@@ -6,6 +6,5 @@ import java.util.Set;
 
 public interface RateLimitConfigCacheRepository {
     Optional<RateLimitConfig> findOneByKey(String key);
-    Set<RateLimitConfig> findAll();
     void save(Set<RateLimitConfig> configs);
 }

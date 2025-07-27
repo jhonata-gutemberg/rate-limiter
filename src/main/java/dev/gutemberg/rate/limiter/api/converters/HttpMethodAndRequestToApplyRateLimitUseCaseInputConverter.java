@@ -15,7 +15,10 @@ public class HttpMethodAndRequestToApplyRateLimitUseCaseInputConverter {
 
     public static ApplyRateLimitUseCaseInput convert(final HttpMethod httpMethod, final HttpServletRequest request) {
         final var resource = request.getRequestURI().replace("/api/", "");
-        final var identifiers = Map.of(By.IP, request.getRemoteAddr());
+        final var identifiers = Map.of(
+                By.IP, request.getRemoteAddr(),
+                By.IDENTIFIER, "12345678"
+        );
         return new ApplyRateLimitUseCaseInput(convert(httpMethod), resource, identifiers);
     }
 
