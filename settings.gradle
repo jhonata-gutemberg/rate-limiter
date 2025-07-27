@@ -1,4 +1,9 @@
 rootProject.name = 'rate-limiter'
+
 include 'domain'
-include 'others'
+include 'entrypoints'
 include 'infrastructure'
+
+project(':domain').projectDir = file('layers/domain')
+project(':entrypoints').projectDir = file('layers/entrypoints')
+project(':infrastructure').projectDir = file('layers/infrastructure')
