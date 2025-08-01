@@ -1,4 +1,4 @@
-package dev.gutemberg.rate.limiter.entrypoints.api.models;
+package dev.gutemberg.rate.limiter.entrypoints.api.builders;
 
 import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.usecases.ApplyRateLimitUseCaseOutput.Allowed;
 import org.springframework.http.HttpHeaders;
@@ -30,7 +30,8 @@ public class HttpHeadersBuilder {
     }
 
     public static HttpHeaders build(final Denied denied) {
-        final var retryAfterInSeconds = Duration.between(Instant.now(), denied.nextRefillAt()).getSeconds();
+        final var interval = Duration.between(Instant.now(), denied.nextRefillAt()).getSeconds();
+        final var retryAfterInSeconds = interval > 0 ? interval : 0;
         final var headers = new HttpHeaders();
         headers.add(RATE_LIMIT_RETRY_AFTER_SECONDS_HEADER, String.valueOf(retryAfterInSeconds));
         return headers;
