@@ -1,4 +1,4 @@
 dependencies {
     implementation project(':modules:domain')
-    implementation 'org.jobrunr:jobrunr-spring-boot-3-starter:8.0.1'
+    implementation 'org.jobrunr:jobrunr:8.0.1'
 }
