@@ -2,17 +2,18 @@ package dev.gutemberg.rate.limiter.infra.redis.repositories;
 
 import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucket;
 import dev.gutemberg.rate.limiter.domain.token.bucket.repositories.TokenBucketRepository;
+import dev.gutemberg.rate.limiter.infra.redis.contracts.RedisTemplate;
 import dev.gutemberg.rate.limiter.infra.redis.contracts.RedisTemplateFactory;
 import dev.gutemberg.rate.limiter.infra.redis.models.TokenBucketValue;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Repository;
+import jakarta.inject.Named;
+
 import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.function.Function;
 
-@Repository
+@Named
 public class RedisTokenBucketRepository implements TokenBucketRepository {
-    private final RedisTemplate<String, TokenBucketValue> redisTemplate;
+    private final RedisTemplate<TokenBucketValue> redisTemplate;
 
     public RedisTokenBucketRepository(final RedisTemplateFactory redisTemplateFactory) {
         this.redisTemplate = redisTemplateFactory.getTemplate(TokenBucketValue.class);
