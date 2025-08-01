@@ -5,6 +5,9 @@ import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.usecases.ApplyRate
 import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit.By;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
 import java.util.Map;
 
 import static dev.gutemberg.rate.limiter.domain.rate.limit.contracts.usecases.ApplyRateLimitUseCaseInput.Action.*;
@@ -14,10 +17,14 @@ public class HttpMethodAndRequestToApplyRateLimitUseCaseInputConverter {
     private HttpMethodAndRequestToApplyRateLimitUseCaseInputConverter() {}
 
     public static ApplyRateLimitUseCaseInput convert(final HttpMethod httpMethod, final HttpServletRequest request) {
+        final var userId = request.getHeader("USER_ID");
+        if (userId == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
         final var resource = request.getRequestURI().replace("/api/", "");
         final var identifiers = Map.of(
                 By.IP, request.getRemoteAddr(),
-                By.IDENTIFIER, "12345678"
+                By.IDENTIFIER, userId
         );
         return new ApplyRateLimitUseCaseInput(convert(httpMethod), resource, identifiers);
     }
