@@ -6,7 +6,4 @@ include 'modules:infra:jobrunr'
 include 'modules:infra:redis'
 include 'modules:infra:s3'
 include 'modules:infra:spring'
-
-project(':modules:domain').projectDir = file('modules/domain')
-project(':modules:entrypoints').projectDir = file('modules/entrypoints')
-project(':modules:infra:jobrunr').projectDir = file('modules/infra/jobrunr')
+include 'modules:infra:slf4j'

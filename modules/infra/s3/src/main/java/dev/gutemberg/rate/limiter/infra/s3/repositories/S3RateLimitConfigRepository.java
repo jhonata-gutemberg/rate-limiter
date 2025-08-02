@@ -4,25 +4,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig;
 import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.repositories.RateLimitConfigRepository;
+import dev.gutemberg.rate.limiter.infra.s3.contracts.Logger;
+import dev.gutemberg.rate.limiter.infra.s3.contracts.LoggerFactory;
 import dev.gutemberg.rate.limiter.infra.s3.converters.ConfigFromFileToRateLimitConfigConverter;
 import dev.gutemberg.rate.limiter.infra.s3.models.RateLimitConfigFromFile;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import jakarta.inject.Named;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.stereotype.Repository;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Repository
+@Named
 public class S3RateLimitConfigRepository implements RateLimitConfigRepository {
     private final ResourceLoader resourceLoader;
     private final Logger logger;
 
-    public S3RateLimitConfigRepository(final ResourceLoader resourceLoader) {
+    public S3RateLimitConfigRepository(final ResourceLoader resourceLoader, final LoggerFactory loggerFactory) {
         this.resourceLoader = resourceLoader;
-        this.logger = LoggerFactory.getLogger(getClass());
+        this.logger = loggerFactory.getLogger(getClass());
     }
 
     @Override
