@@ -1,4 +1,0 @@
-dependencies {
-    implementation project(':modules:domain')
-    implementation 'org.jobrunr:jobrunr:8.0.1'
-}

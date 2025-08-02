@@ -1,9 +1,17 @@
 rootProject.name = 'rate-limiter'
 
-include 'modules:domain'
-include 'modules:entrypoints'
-include 'modules:infra:jobrunr'
-include 'modules:infra:redis'
-include 'modules:infra:s3'
-include 'modules:infra:spring'
-include 'modules:infra:slf4j'
+include(":domain")
+include(":entrypoints")
+include(":jobrunr")
+include(":redis")
+include(":s3")
+include(":slf4j")
+include(":spring")
+
+project(":domain").projectDir = file("modules/domain")
+project(":entrypoints").projectDir = file("modules/entrypoints")
+project(":redis").projectDir = file("modules/vendors/redis")
+project(":jobrunr").projectDir = file("modules/vendors/jobrunr")
+project(":s3").projectDir = file("modules/vendors/s3")
+project(":slf4j").projectDir = file("modules/vendors/slf4j")
+project(":spring").projectDir = file("modules/vendors/spring")

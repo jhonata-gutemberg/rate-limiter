@@ -1,0 +1,17 @@
+package dev.gutemberg.rate.limiter.vendors.spring.configs;
+
+import org.jobrunr.jobs.mappers.JobMapper;
+import org.jobrunr.storage.InMemoryStorageProvider;
+import org.jobrunr.storage.StorageProvider;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class JobRunrConfig {
+    @Bean
+    public StorageProvider storageProvider(final JobMapper jobMapper) {
+        final var storageProvider = new InMemoryStorageProvider();
+        storageProvider.setJobMapper(jobMapper);
+        return storageProvider;
+    }
+}

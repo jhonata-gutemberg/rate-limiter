@@ -1,0 +1,18 @@
+plugins {
+    id 'org.springframework.boot' version '3.5.3'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+dependencies {
+    implementation project(":entrypoints")
+    implementation project(":jobrunr")
+    implementation project(":redis")
+    implementation project(":s3")
+    implementation project(":slf4j")
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.jobrunr:jobrunr-spring-boot-3-starter:8.0.1'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+}

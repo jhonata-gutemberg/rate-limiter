@@ -1,15 +1,14 @@
 package dev.gutemberg.rate.limiter.entrypoints.api.builders;
 
-import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.usecases.ApplyRateLimitUseCaseOutput.Allowed;
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.usecases.ApplyRateLimitUseCaseOutput.Allowed;
 import org.springframework.http.HttpHeaders;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Set;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
-import static dev.gutemberg.rate.limiter.domain.rate.limit.contracts.usecases.ApplyRateLimitUseCaseOutput.*;
+import static dev.gutemberg.rate.limiter.domain.rate.limit.models.usecases.ApplyRateLimitUseCaseOutput.*;
 
 public class HttpHeadersBuilder {
     private static final String RATE_LIMIT_RETRY_AFTER_SECONDS_HEADER = "X-RateLimit-Retry-After-Seconds";

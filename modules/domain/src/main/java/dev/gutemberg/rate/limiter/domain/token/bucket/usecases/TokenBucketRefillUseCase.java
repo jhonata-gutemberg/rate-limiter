@@ -1,7 +1,7 @@
 package dev.gutemberg.rate.limiter.domain.token.bucket.usecases;
 
 import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucketRefill;
-import dev.gutemberg.rate.limiter.domain.token.bucket.repositories.TokenBucketRepository;
+import dev.gutemberg.rate.limiter.domain.token.bucket.contracts.repositories.TokenBucketRepository;
 import jakarta.inject.Named;
 
 @Named

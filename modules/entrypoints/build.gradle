@@ -4,13 +4,6 @@ plugins {
 }
 
 dependencies {
-    implementation project(':modules:domain')
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation project(':domain')
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
-    implementation 'org.jobrunr:jobrunr-spring-boot-3-starter:8.0.1'
-
-    //developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }

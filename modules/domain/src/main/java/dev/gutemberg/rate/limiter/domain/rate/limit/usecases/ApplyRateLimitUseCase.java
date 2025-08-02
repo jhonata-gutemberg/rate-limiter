@@ -1,15 +1,15 @@
 package dev.gutemberg.rate.limiter.domain.rate.limit.usecases;
 
 import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.schedulers.TokenBucketRefillScheduler;
-import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig;
-import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.usecases.ApplyRateLimitUseCaseInput;
-import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.usecases.ApplyRateLimitUseCaseOutput;
-import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.usecases.ApplyRateLimitUseCaseOutput.Allowed;
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.entities.RateLimitConfig;
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.usecases.ApplyRateLimitUseCaseInput;
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.usecases.ApplyRateLimitUseCaseOutput;
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.usecases.ApplyRateLimitUseCaseOutput.Allowed;
 import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.repositories.RateLimitConfigCacheRepository;
-import dev.gutemberg.rate.limiter.domain.rate.limit.models.RateLimitConfig.Limit;
+import dev.gutemberg.rate.limiter.domain.rate.limit.models.entities.RateLimitConfig.Limit;
 import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucketConfig;
 import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucketRefill;
-import dev.gutemberg.rate.limiter.domain.token.bucket.repositories.TokenBucketRepository;
+import dev.gutemberg.rate.limiter.domain.token.bucket.contracts.repositories.TokenBucketRepository;
 import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucket;
 import jakarta.inject.Named;
 import java.time.Instant;
