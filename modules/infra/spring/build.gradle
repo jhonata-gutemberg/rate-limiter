@@ -8,6 +8,7 @@ dependencies {
     implementation project(":modules:infra:jobrunr")
     implementation project(":modules:infra:redis")
     implementation project(":modules:infra:s3")
+    implementation project(":modules:infra:slf4j")
 
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.boot:spring-boot-starter-web'

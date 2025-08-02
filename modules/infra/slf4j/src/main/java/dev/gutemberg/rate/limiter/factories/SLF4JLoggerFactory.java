@@ -1,6 +1,6 @@
-package factories;
+package dev.gutemberg.rate.limiter.factories;
 
-import adapters.SLF4JLogger;
+import dev.gutemberg.rate.limiter.adapters.SLF4JLogger;
 import dev.gutemberg.rate.limiter.infra.s3.contracts.Logger;
 import dev.gutemberg.rate.limiter.infra.s3.contracts.LoggerFactory;
 import jakarta.inject.Named;

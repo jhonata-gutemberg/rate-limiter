@@ -1,4 +1,4 @@
-package adapters;
+package dev.gutemberg.rate.limiter.adapters;
 
 import dev.gutemberg.rate.limiter.infra.s3.contracts.Logger;
 
