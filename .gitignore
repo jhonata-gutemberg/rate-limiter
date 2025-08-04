@@ -6,3 +6,6 @@ out
 !**/src/main/**/build/
 !**/src/test/**/build/
 **/*.iml
+.terraform
+.terraform.lock.hcl
+
