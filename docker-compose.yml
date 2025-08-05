@@ -2,4 +2,20 @@ services:
   redis:
     image: redis:8.2-rc1
     ports:
-      - 6379:6379
+      - "6379:6379"
+  localstack:
+    container_name: localstack
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+      - "4510-4559:4510-4559"
+    environment:
+      - DEBUG=${DEBUG:-0}
+      - AWS_ACCESS_KEY_ID=local
+      - AWS_SECRET_ACCESS_KEY=local
+      - AWS_DEFAULT_REGION=us-west-2
+    volumes:
+      - localstack:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+volumes:
+  localstack:
