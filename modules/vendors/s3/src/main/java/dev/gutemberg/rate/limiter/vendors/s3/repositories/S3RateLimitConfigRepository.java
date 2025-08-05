@@ -2,12 +2,12 @@ package dev.gutemberg.rate.limiter.vendors.s3.repositories;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import dev.gutemberg.rate.limiter.domain.rate.limit.models.entities.RateLimitConfig;
-import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.repositories.RateLimitConfigRepository;
+import dev.gutemberg.rate.limiter.vendors.domain.rate.limit.models.entities.RateLimitConfig;
+import dev.gutemberg.rate.limiter.vendors.domain.rate.limit.contracts.repositories.RateLimitConfigRepository;
 import dev.gutemberg.rate.limiter.commons.contracts.loggers.Logger;
 import dev.gutemberg.rate.limiter.commons.contracts.loggers.LoggerFactory;
 import dev.gutemberg.rate.limiter.vendors.s3.converters.ConfigFromFileToRateLimitConfigConverter;
-import dev.gutemberg.rate.limiter.vendors.s3.models.RateLimitConfigFromFile;
+import dev.gutemberg.rate.limiter.vendors.s3.models.entities.RateLimitConfigFromFile;
 import jakarta.inject.Named;
 import org.springframework.core.io.ResourceLoader;
 import java.io.IOException;

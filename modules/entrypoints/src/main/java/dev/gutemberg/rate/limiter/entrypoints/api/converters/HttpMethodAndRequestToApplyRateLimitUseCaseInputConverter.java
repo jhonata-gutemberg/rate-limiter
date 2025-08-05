@@ -1,15 +1,13 @@
 package dev.gutemberg.rate.limiter.entrypoints.api.converters;
 
-import dev.gutemberg.rate.limiter.domain.rate.limit.models.usecases.ApplyRateLimitUseCaseInput;
-import dev.gutemberg.rate.limiter.domain.rate.limit.models.usecases.ApplyRateLimitUseCaseInput.Action;
-import dev.gutemberg.rate.limiter.domain.rate.limit.models.entities.RateLimitConfig.Limit.By;
+import dev.gutemberg.rate.limiter.vendors.domain.rate.limit.models.usecases.ApplyRateLimitUseCaseInput;
+import dev.gutemberg.rate.limiter.vendors.domain.rate.limit.models.usecases.ApplyRateLimitUseCaseInput.Action;
+import dev.gutemberg.rate.limiter.vendors.domain.rate.limit.models.entities.RateLimitConfig.Limit.By;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.Map;
-
-import static dev.gutemberg.rate.limiter.domain.rate.limit.models.usecases.ApplyRateLimitUseCaseInput.Action.*;
 
 public class HttpMethodAndRequestToApplyRateLimitUseCaseInputConverter {
 

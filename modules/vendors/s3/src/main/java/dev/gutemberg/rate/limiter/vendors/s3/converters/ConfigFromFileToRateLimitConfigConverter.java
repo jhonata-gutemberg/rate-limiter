@@ -1,12 +1,12 @@
 package dev.gutemberg.rate.limiter.vendors.s3.converters;
 
-import dev.gutemberg.rate.limiter.domain.rate.limit.models.entities.RateLimitConfig;
-import dev.gutemberg.rate.limiter.vendors.s3.models.RateLimitConfigFromFile;
+import dev.gutemberg.rate.limiter.vendors.domain.rate.limit.models.entities.RateLimitConfig;
+import dev.gutemberg.rate.limiter.vendors.s3.models.entities.RateLimitConfigFromFile;
 import java.util.stream.Collectors;
 
-import static dev.gutemberg.rate.limiter.domain.rate.limit.models.entities.RateLimitConfig.Limit;
-import static dev.gutemberg.rate.limiter.domain.rate.limit.models.entities.RateLimitConfig.Limit.By;
-import static dev.gutemberg.rate.limiter.domain.rate.limit.models.entities.RateLimitConfig.Limit.Unit;
+import static dev.gutemberg.rate.limiter.vendors.domain.rate.limit.models.entities.RateLimitConfig.Limit;
+import static dev.gutemberg.rate.limiter.vendors.domain.rate.limit.models.entities.RateLimitConfig.Limit.By;
+import static dev.gutemberg.rate.limiter.vendors.domain.rate.limit.models.entities.RateLimitConfig.Limit.Unit;
 
 public class ConfigFromFileToRateLimitConfigConverter {
     private ConfigFromFileToRateLimitConfigConverter() {}

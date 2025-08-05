@@ -1,7 +1,7 @@
 package dev.gutemberg.rate.limiter.vendors.redis.repositories;
 
-import dev.gutemberg.rate.limiter.domain.rate.limit.models.entities.RateLimitConfig;
-import dev.gutemberg.rate.limiter.domain.rate.limit.contracts.repositories.RateLimitConfigCacheRepository;
+import dev.gutemberg.rate.limiter.vendors.domain.rate.limit.models.entities.RateLimitConfig;
+import dev.gutemberg.rate.limiter.vendors.domain.rate.limit.contracts.repositories.RateLimitConfigCacheRepository;
 import dev.gutemberg.rate.limiter.vendors.redis.contracts.RedisTemplate;
 import dev.gutemberg.rate.limiter.vendors.redis.contracts.RedisTemplateFactory;
 import jakarta.inject.Named;
@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static dev.gutemberg.rate.limiter.domain.rate.limit.models.entities.RateLimitConfig.Limit;
+import static dev.gutemberg.rate.limiter.vendors.domain.rate.limit.models.entities.RateLimitConfig.Limit;
 
 @Named
 public class RedisRateLimitConfigCacheRepository implements RateLimitConfigCacheRepository {

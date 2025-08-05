@@ -1,6 +1,6 @@
 package dev.gutemberg.rate.limiter.entrypoints.workers;
 
-import dev.gutemberg.rate.limiter.domain.rate.limit.usecases.RefreshRateLimitConfigCacheRepositoryUseCase;
+import dev.gutemberg.rate.limiter.vendors.domain.rate.limit.usecases.RefreshRateLimitConfigCacheRepositoryUseCase;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 

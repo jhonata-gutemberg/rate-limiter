@@ -1,10 +1,10 @@
 package dev.gutemberg.rate.limiter.vendors.redis.repositories;
 
-import dev.gutemberg.rate.limiter.domain.token.bucket.models.TokenBucket;
-import dev.gutemberg.rate.limiter.domain.token.bucket.contracts.repositories.TokenBucketRepository;
+import dev.gutemberg.rate.limiter.vendors.domain.token.bucket.models.entities.TokenBucket;
+import dev.gutemberg.rate.limiter.vendors.domain.token.bucket.contracts.repositories.TokenBucketRepository;
 import dev.gutemberg.rate.limiter.vendors.redis.contracts.RedisTemplate;
 import dev.gutemberg.rate.limiter.vendors.redis.contracts.RedisTemplateFactory;
-import dev.gutemberg.rate.limiter.vendors.redis.models.TokenBucketValue;
+import dev.gutemberg.rate.limiter.vendors.redis.models.value.objects.TokenBucketValue;
 import jakarta.inject.Named;
 
 import java.util.Optional;
