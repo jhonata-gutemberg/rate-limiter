@@ -1,5 +1,5 @@
 dependencies {
-    implementation project(":s3")
+    implementation project(":commons")
 
     implementation 'org.slf4j:slf4j-api:2.0.17'
 }

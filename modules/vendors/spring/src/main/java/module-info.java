@@ -1,5 +1,5 @@
-module dev.gutemberg.rate.limiter.vendors.spring {
-    requires dev.gutemberg.rate.limiter.vendors.redis;
+module spring {
+    requires redis;
     requires spring.boot;
     requires spring.boot.autoconfigure;
     requires spring.context;

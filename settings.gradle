@@ -2,6 +2,7 @@ rootProject.name = 'rate-limiter'
 
 include(":domain")
 include(":entrypoints")
+include(":commons")
 include(":jobrunr")
 include(":redis")
 include(":s3")
@@ -10,6 +11,7 @@ include(":spring")
 
 project(":domain").projectDir = file("modules/domain")
 project(":entrypoints").projectDir = file("modules/entrypoints")
+project(":commons").projectDir = file("modules/commons")
 project(":redis").projectDir = file("modules/vendors/redis")
 project(":jobrunr").projectDir = file("modules/vendors/jobrunr")
 project(":s3").projectDir = file("modules/vendors/s3")

@@ -1,4 +1,4 @@
-module dev.gutemberg.rate.limiter.domain {
+module domain {
     requires jakarta.inject;
 
     exports dev.gutemberg.rate.limiter.domain.rate.limit.models.entities;

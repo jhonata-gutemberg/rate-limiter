@@ -1,5 +1,5 @@
-module dev.gutemberg.rate.limiter.vendors.jobrunr {
-    requires dev.gutemberg.rate.limiter.domain;
+module jobrunr {
+    requires domain;
     requires jakarta.inject;
     requires org.jobrunr.core;
 }
