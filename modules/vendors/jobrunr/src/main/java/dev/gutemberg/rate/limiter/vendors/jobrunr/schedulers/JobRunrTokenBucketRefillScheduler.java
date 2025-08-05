@@ -8,7 +8,10 @@ import jakarta.inject.Named;
 import org.jobrunr.scheduling.JobScheduler;
 import java.util.Map;
 
-import static org.jobrunr.scheduling.cron.Cron.*;
+import static dev.gutemberg.rate.limiter.vendors.domain.rate.limit.models.entities.RateLimitConfig.Limit.Unit.*;
+import static org.jobrunr.scheduling.cron.Cron.minutely;
+import static org.jobrunr.scheduling.cron.Cron.hourly;
+import static org.jobrunr.scheduling.cron.Cron.daily;
 
 @Named
 public class JobRunrTokenBucketRefillScheduler implements TokenBucketRefillScheduler {

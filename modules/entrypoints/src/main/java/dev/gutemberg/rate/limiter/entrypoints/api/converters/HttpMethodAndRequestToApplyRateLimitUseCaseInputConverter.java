@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import java.util.Map;
 
+import static dev.gutemberg.rate.limiter.vendors.domain.rate.limit.models.usecases.ApplyRateLimitUseCaseInput.Action.*;
+
 public class HttpMethodAndRequestToApplyRateLimitUseCaseInputConverter {
 
     private HttpMethodAndRequestToApplyRateLimitUseCaseInputConverter() {}

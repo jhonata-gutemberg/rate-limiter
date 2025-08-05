@@ -1,6 +1,7 @@
 package dev.gutemberg.rate.limiter.entrypoints.api.builders;
 
 import dev.gutemberg.rate.limiter.vendors.domain.rate.limit.models.usecases.ApplyRateLimitUseCaseOutput.Allowed;
+import dev.gutemberg.rate.limiter.vendors.domain.rate.limit.models.usecases.ApplyRateLimitUseCaseOutput.Denied;
 import org.springframework.http.HttpHeaders;
 import java.time.Duration;
 import java.time.Instant;
