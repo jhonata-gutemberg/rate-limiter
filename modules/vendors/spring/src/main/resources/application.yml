@@ -12,3 +12,6 @@ spring:
 jobrunr:
   dashboard.enabled: true
   background-job-server.enabled: true
+amazon:
+  accessKey: test
+  secretKey: test
