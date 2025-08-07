@@ -5,4 +5,5 @@ module s3 {
     requires com.fasterxml.jackson.dataformat.yaml;
     requires jakarta.inject;
     requires spring.core;
+    requires software.amazon.awssdk.services.s3;
 }

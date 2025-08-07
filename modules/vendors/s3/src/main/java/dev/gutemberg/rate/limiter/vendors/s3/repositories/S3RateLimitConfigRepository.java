@@ -9,7 +9,8 @@ import dev.gutemberg.rate.limiter.commons.contracts.loggers.LoggerFactory;
 import dev.gutemberg.rate.limiter.vendors.s3.converters.ConfigFromFileToRateLimitConfigConverter;
 import dev.gutemberg.rate.limiter.vendors.s3.models.entities.RateLimitConfigFromFile;
 import jakarta.inject.Named;
-import org.springframework.core.io.ResourceLoader;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Set;
@@ -17,20 +18,21 @@ import java.util.stream.Collectors;
 
 @Named
 public class S3RateLimitConfigRepository implements RateLimitConfigRepository {
-    private final ResourceLoader resourceLoader;
     private final Logger logger;
+    private final S3Client s3Client;
 
-    public S3RateLimitConfigRepository(final ResourceLoader resourceLoader, final LoggerFactory loggerFactory) {
-        this.resourceLoader = resourceLoader;
+    public S3RateLimitConfigRepository(final LoggerFactory loggerFactory, final S3Client s3Client) {
         this.logger = loggerFactory.getLogger(getClass());
+        this.s3Client = s3Client;
     }
 
     @Override
     public Set<RateLimitConfig> findAll() {
-        try {
-            final var inputStream = resourceLoader.getResource("classpath:limits.yml").getInputStream();
-            final var objectMapper = new ObjectMapper(new YAMLFactory());
-            return Arrays.stream(objectMapper.readValue(inputStream, RateLimitConfigFromFile[].class))
+        final var objectMapper = new ObjectMapper(new YAMLFactory());
+        final var request = GetObjectRequest.builder().bucket("ratelimiter-configs").key("limits.yml").build();
+        try (final var response = s3Client.getObject(request)) {
+            final var configs = objectMapper.readValue(response.readAllBytes(), RateLimitConfigFromFile[].class);
+            return Arrays.stream(configs)
                     .map(ConfigFromFileToRateLimitConfigConverter::convert)
                     .collect(Collectors.toUnmodifiableSet());
         } catch (final IOException exception) {
