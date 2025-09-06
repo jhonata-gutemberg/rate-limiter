@@ -1,4 +1,4 @@
-# 🚦 Rate Limiter
+![Rate Limiter](docs/assets/rate-limiter.png)
 
 ## 🧠 What Is a Rate Limiter?
 - A rate limiter controls how many requests a user or client can make within a given time window.
